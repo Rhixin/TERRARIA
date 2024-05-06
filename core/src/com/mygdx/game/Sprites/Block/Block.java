@@ -1,21 +1,38 @@
 package com.mygdx.game.Sprites.Block;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.game.Helper.Cell;
+import com.mygdx.game.Helper.WorldCreator;
 import com.mygdx.game.Terraria;
+import jdk.internal.net.http.common.Pair;
+import org.w3c.dom.Text;
 
 public abstract class Block {
     protected World world;
-    protected TiledMap map;
-
-    protected Rectangle rect;
     protected Body body;
 
-    public Block (World world, TiledMap map, Rectangle rect){
+    protected Sprite sprite;
+
+    protected Texture texture;
+
+    public Cell cell;
+
+
+    public Block (World world, Rectangle rect, Texture texture){
+        this.texture = texture;
+
+        cell = new Cell( (int) rect.getX() / 32, (int) rect.getY() / 32);
+
+        sprite = new Sprite(texture);
+        sprite.setSize(32,32);
+
         this.world = world;
-        this.map = map;
-        this.rect = rect;
 
         BodyDef bdef = new BodyDef();
         FixtureDef fdef = new FixtureDef();
@@ -36,5 +53,20 @@ public abstract class Block {
         fdef.shape = shape;
         body.createFixture(fdef);
 
+        sprite.setPosition(body.getPosition().x - sprite.getWidth() / 2, body.getPosition().y - sprite.getHeight() / 2);
+
     }
+
+    public void destroyed(){
+        //WorldCreator.blocks.remove(this);
+        world.destroyBody(body);
+        sprite.setAlpha(0);
+
+        //sprite.getTexture().dispose();
+    }
+
+    public void render(SpriteBatch batch) {
+        sprite.draw(batch);
+    }
+
 }

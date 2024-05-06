@@ -11,4 +11,5 @@ public class DesktopLauncher {
 		config.setTitle("FINALPROJECT");
 		new Lwjgl3Application(new Terraria(), config);
 	}
+
 }
