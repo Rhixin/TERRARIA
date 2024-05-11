@@ -1,4 +1,4 @@
-package com.mygdx.game.Sprites.Block;
+package com.mygdx.game.Block;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.Helper.Cell;
 import com.mygdx.game.Helper.WorldCreator;
+import com.mygdx.game.Sprites.Drop;
 import com.mygdx.game.Terraria;
 import jdk.internal.net.http.common.Pair;
 import org.w3c.dom.Text;
@@ -25,10 +26,11 @@ public abstract class Block {
     public Cell cell;
 
     public float breaklife = 100;
+    public int posX, posY;
 
 
     public Block (World world, Rectangle rect, Texture texture){
-        this.texture = texture;
+
 
         cell = new Cell( (int) rect.getX() / 32, (int) rect.getY() / 32);
 
@@ -62,13 +64,8 @@ public abstract class Block {
     }
 
     public void destroyed(){
-        //WorldCreator.blocks.remove(this);
-        //WorldCreator.blocks.removeIf(b -> b.equals(this));
-        //WorldCreator.blocks.remove(this);
         world.destroyBody(body);
         sprite.setAlpha(0);
-
-        //sprite = null;
     }
 
     public void render(SpriteBatch batch) {
@@ -78,5 +75,7 @@ public abstract class Block {
     public void changeTexture(TextureRegion textureRegion){
         sprite.setRegion(textureRegion);
     }
+
+    public abstract Drop blocktodrop();
 
 }
