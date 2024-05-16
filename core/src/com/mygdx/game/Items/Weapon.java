@@ -1,14 +1,16 @@
 package com.mygdx.game.Items;
 
-public abstract class Weapon extends Item{
-    private float damage;
-    private float hp;
+import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.game.Sprites.WeaponObject;
 
-    public Weapon(String name, String description, float damage, float hp){
+public abstract class Weapon extends Item{
+
+
+    protected Weapon(String name, String description) {
         super(name, description);
-        this.damage = damage;
-        this.hp = hp;
     }
 
-    public abstract void useItem();
+    public abstract WeaponObject getWeaponObject();
+
+
 }

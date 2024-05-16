@@ -1,21 +1,20 @@
 package com.mygdx.game.Screens;
 
-import com.badlogic.gdx.*;
-import com.mygdx.game.MyWorld;
+import com.badlogic.gdx.Screen;
+import com.mygdx.game.MiningWorld;
+import com.mygdx.game.YearOneWorld;
 
-public class EntityScreen implements Screen {
+public class YearOneScreen implements Screen {
+    private YearOneWorld world;
 
-    private final MyWorld world;
 
-    public EntityScreen(){
-        world = new MyWorld();
+    public YearOneScreen(MiningWorld miningWorld){
+        world = new YearOneWorld(miningWorld);
     }
-
     @Override
     public void show() {
+
     }
-
-
 
     @Override
     public void render(float delta) {
@@ -47,5 +46,9 @@ public class EntityScreen implements Screen {
     @Override
     public void dispose() {
         world.dispose();
+    }
+
+    public YearOneWorld getWorld() {
+        return world;
     }
 }

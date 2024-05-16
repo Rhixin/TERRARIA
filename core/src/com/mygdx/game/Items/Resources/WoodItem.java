@@ -23,4 +23,9 @@ public class WoodItem extends Resource {
     public Texture getTexture() {
         return t;
     }
+
+    @Override
+    public int getValueinCoin() {
+        return 5;
+    }
 }

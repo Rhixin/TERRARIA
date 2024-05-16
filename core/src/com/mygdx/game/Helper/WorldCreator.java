@@ -1,5 +1,8 @@
 package com.mygdx.game.Helper;
 
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
@@ -18,6 +21,9 @@ public class WorldCreator {
     public static HashMap<Vector2, Block> syncWorldAndTiledMap(World world, TiledMap map){
 
         HashMap<Vector2, Block> tiles = new HashMap<>();
+
+
+
         TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(2);
 
         for (int y = 0; y < layer.getHeight(); y++) {
@@ -96,5 +102,27 @@ public class WorldCreator {
 
 
         return tiles;
+    }
+
+    public static void syncWorldAndTiledMapYearOne(World world, TiledMap map){
+        BodyDef bdef = new BodyDef();
+        PolygonShape shape = new PolygonShape();
+        FixtureDef fdef = new FixtureDef();
+        Body body;
+
+
+        for(MapObject object : map.getLayers().get(8).getObjects().getByType(RectangleMapObject.class)){
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+
+            bdef.type = BodyDef.BodyType.StaticBody;
+            bdef.position.set((rect.getX() + rect.getWidth() / 2), (rect.getY() + rect.getHeight() / 2) );
+
+            body = world.createBody(bdef);
+
+            shape.setAsBox(rect.getWidth() / 2 , rect.getHeight() / 2);
+            fdef.shape = shape;
+            body.createFixture(fdef);
+        }
+
     }
 }

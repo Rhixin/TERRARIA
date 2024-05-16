@@ -38,17 +38,16 @@ public class Hud {
             ItemBox itembox;
 
             if(item == null){
-                itembox = new ItemBox();
+                itembox = new ItemBox(prev + 7, Terraria.V_HEIGHT - 48);
             } else {
-                itembox = new ItemBox(item);
+                itembox = new ItemBox(item, prev + 7, Terraria.V_HEIGHT - 48);
             }
+
             InventoryBox box = new InventoryBox(itembox);
 
             box.setSize(40,40);
             box.itembox.setSize(25,25);
-
             box.setPosition(prev, Terraria.V_HEIGHT - 55);
-            box.itembox.setPosition(prev + 7, Terraria.V_HEIGHT - 48);
             box.itembox.initLabel();
             prev += 55;
 
@@ -60,7 +59,8 @@ public class Hud {
 
         }
 
-        Gdx.input.setInputProcessor(stage);
+        inventoryBoxDisplay.get(0).setOnHoldTexture();
+
     }
 
     public Stage getStage(){
@@ -79,13 +79,29 @@ public class Hud {
         }
     }
 
+    public void update(float dt, ArrayList<Pair<Item, Integer>> player_items){
+        for(int i = 0; i < 8; i++){
+            Item item = inventoryBoxDisplay.get(i).getItem();
+            int count = inventoryBoxDisplay.get(i).getItemCount();
+
+            Pair<Item,Integer> player_item = new Pair<>(item,count);
+            inventoryBoxDisplay.get(i).itembox.setItem(player_item.getFirst(), player_item.getSecond());
+
+            player_items.set(i, new Pair<>(item,count));
+
+        }
+    }
+
     public void render(float dt){
+        stage.act();
+        stage.draw();
+
         for(InventoryBox box : inventoryBoxDisplay){
             box.itembox.render();
         }
 
-        stage.draw();
     }
+
 
 
 }

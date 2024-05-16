@@ -3,10 +3,12 @@ package com.mygdx.game;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.Sprites.Drop;
 import com.mygdx.game.Sprites.Player;
+import com.mygdx.game.Sprites.WeaponObject;
+import com.mygdx.game.Sprites.YearOneBoss;
 
 public class WorldContactListener implements ContactListener {
-    MyWorld world;
-    public WorldContactListener(MyWorld world){
+    GameWorld world;
+    public WorldContactListener(GameWorld world){
         this.world = world;
     }
     @Override
@@ -28,6 +30,18 @@ public class WorldContactListener implements ContactListener {
             Drop drop = (Drop) fixtureA.getUserData();
 
             player.getDrop(drop);
+        }
+
+        if(fixtureA.getUserData() instanceof WeaponObject && fixtureB.getUserData() instanceof YearOneBoss){
+            YearOneBoss boss = (YearOneBoss) fixtureB.getUserData();
+            boss.life -= 20;
+            System.out.println("Lifee: " + boss.life);
+        }
+
+        if(fixtureB.getUserData() instanceof WeaponObject && fixtureA.getUserData() instanceof YearOneBoss){
+            YearOneBoss boss = (YearOneBoss) fixtureA.getUserData();
+            boss.life -= 1;
+            System.out.println("Lifee: " + boss.life);
         }
 
 

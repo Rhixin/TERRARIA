@@ -4,16 +4,21 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.game.Sprites.GameMode;
 import com.mygdx.game.Sprites.Player;
 
 public class MyInputProcessorFactory {
 
-    public InputProcessor processInput (MyWorld world, String listenerType){
+    GameWorld world;
+
+
+    public InputProcessor processInput (GameWorld world, String listenerType, Player player){
+        this.world = world;
         switch (listenerType) {
             case "A":
                 return new MyInputListenerA(world);
             case "B":
-                return new MyInputListenerB(world.getPlayer());
+                return new MyInputListenerB(world, player);
             default:
                 return new MyInputListenerA(world);
         }
@@ -23,10 +28,10 @@ public class MyInputProcessorFactory {
     public class MyInputListenerA implements InputProcessor {
         private boolean isLeftHold = false;
         private Vector2 current_tile = new Vector2(0,0);
-        private MyWorld world;
+        private MiningWorld world;
 
-        public MyInputListenerA(MyWorld world) {
-            this.world = world;
+        public MyInputListenerA(GameWorld world) {
+            this.world = (MiningWorld) world;
         }
         public void updateListenerA(){
             if(isLeftHold){
@@ -99,9 +104,21 @@ public class MyInputProcessorFactory {
 
     public class MyInputListenerB implements InputProcessor {
         Player player;
+        GameWorld world;
 
-        public MyInputListenerB(Player player) {
+
+        public MyInputListenerB(GameWorld world, Player player) {
+            this.world = world;
             this.player = player;
+
+        }
+
+        public String debugg(){
+            if(world instanceof MiningWorld){
+                return "Mine";
+            } else {
+                return "One";
+            }
         }
 
         @Override
@@ -146,6 +163,11 @@ public class MyInputProcessorFactory {
 
         @Override
         public boolean scrolled(float amountX, float amountY) {
+
+            if(Terraria.gameMode == GameMode.MINING_MODE && world instanceof YearOneWorld){
+                return false;
+            }
+
             if (amountY < 0) {
                 player.setCurrentItem( (player.getCurrentItem() + 1) % 8);
             } else {

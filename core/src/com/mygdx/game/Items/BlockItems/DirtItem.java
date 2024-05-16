@@ -36,4 +36,9 @@ public class DirtItem extends BlockItem {
         Dirt d = new Dirt(world,rect);
         return d;
     }
+
+    @Override
+    public int getValueinCoin() {
+        return 1;
+    }
 }

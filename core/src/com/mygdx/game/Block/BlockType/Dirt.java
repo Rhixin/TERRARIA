@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.Helper.AnimationHelper;
 import com.mygdx.game.Items.BlockItems.DirtItem;
 import com.mygdx.game.Items.Item;
-import com.mygdx.game.MyWorld;
+import com.mygdx.game.MiningWorld;
 import com.mygdx.game.Block.Block;
 import com.mygdx.game.Sprites.Drop;
 
@@ -27,34 +27,34 @@ public class Dirt extends Block {
 
         int ansX, ansY;
 
-        if(MyWorld.tilesMap.get(top) == null){
-            if(MyWorld.tilesMap.get(left) == null){
+        if(MiningWorld.tilesMap.get(top) == null){
+            if(MiningWorld.tilesMap.get(left) == null){
                 ansX = 0;
                 ansY = 0;
-            } else if (MyWorld.tilesMap.get(right) == null) {
+            } else if (MiningWorld.tilesMap.get(right) == null) {
                 ansX = 0;
                 ansY = 2;
             } else {
                 ansX = 0;
                 ansY = 1;
             }
-        } else if (MyWorld.tilesMap.get(left) == null){
-            if(MyWorld.tilesMap.get(bottom) == null){
+        } else if (MiningWorld.tilesMap.get(left) == null){
+            if(MiningWorld.tilesMap.get(bottom) == null){
                 ansX = 2;
                 ansY = 0;
             } else {
                 ansX = 1;
                 ansY = 0;
             }
-        } else if (MyWorld.tilesMap.get(right) == null){
-            if(MyWorld.tilesMap.get(bottom) == null){
+        } else if (MiningWorld.tilesMap.get(right) == null){
+            if(MiningWorld.tilesMap.get(bottom) == null){
                 ansX = 2;
                 ansY = 2;
             } else {
                 ansX = 1;
                 ansY = 2;
             }
-        } else if (MyWorld.tilesMap.get(bottom) == null) {
+        } else if (MiningWorld.tilesMap.get(bottom) == null) {
             ansX = 2;
             ansY = 1;
         } else {

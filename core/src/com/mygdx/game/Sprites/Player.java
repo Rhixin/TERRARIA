@@ -3,7 +3,6 @@ package com.mygdx.game.Sprites;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.Helper.AnimationHelper;
@@ -12,10 +11,13 @@ import com.mygdx.game.Helper.Cell;
 import com.mygdx.game.Helper.Pair;
 import com.mygdx.game.Items.Item;
 import com.mygdx.game.Items.Placeable;
-import com.mygdx.game.MyWorld;
+
+import com.mygdx.game.Items.Weapon;
+import com.mygdx.game.Items.Weapons.PaladinItem;
+import com.mygdx.game.MiningWorld;
 import com.mygdx.game.Block.Block;
-import com.mygdx.game.Block.BlockType.Dirt;
 import com.mygdx.game.Screens.Hud;
+import com.mygdx.game.Sprites.WorldWeapons.Paladin;
 import com.mygdx.game.Terraria;
 
 import java.util.ArrayList;
@@ -36,11 +38,14 @@ public class Player extends Sprite{
     private int currentItem = 0;
     private Hud hud;
 
+    private GameMode current_mode;
+
     public Player (World world, Hud hud){
         super(ATLAS.findRegion("steve"));
         this.world = world;
         this.hud = hud;
         this.currentAnimationState = AnimationState.IDLE;
+        current_mode = GameMode.MINING_MODE;
 
         inventory = new ArrayList<>(8);
         playerDeletes = new HashSet<>();
@@ -54,6 +59,8 @@ public class Player extends Sprite{
         TextureRegion playerStand = new TextureRegion(getTexture(), 0, 20, 65, 44);
         setBounds(0,0,48 / Terraria.PPM  , 44 / Terraria.PPM );
         setRegion(playerStand);
+
+        inventory.add(0, new Pair<>(new PaladinItem(new Paladin(world, this, getPosition().x, getPosition().y)), 1));
 
         initAnimations();
     }
@@ -116,8 +123,10 @@ public class Player extends Sprite{
 
     public void placeBlock(int x, int y){
 
+        if(current_mode == GameMode.COMBAT_MODE) return;
+
         Vector2 tile = new Vector2(x,y);
-        Block b = MyWorld.tilesMap.get(tile);
+        Block b = MiningWorld.tilesMap.get(tile);
         if(b != null){
             return;
         }
@@ -135,32 +144,39 @@ public class Player extends Sprite{
             }
         }
 
-        MyWorld.tilesMap.put(tile, new_block);
+        MiningWorld.tilesMap.put(tile, new_block);
 
         //para faster ato game, only update HUD when naa ray changes, not every frame
         syncHudInventory();
     }
 
     public void deleteBlock(int x, int y){
+
+        if(current_mode == GameMode.COMBAT_MODE) return;
+
         Vector2 tile = new Vector2(x,y);
-        Block b = MyWorld.tilesMap.get(tile);
+        Block b = MiningWorld.tilesMap.get(tile);
 
         if(b == null){
             return;
         }
-        //TO DOO damage of player based on current item
+
+        //TODO damage of player based on current item
         b.breaklife -=2;
+        //--------------------------------------------
 
         if(b.breaklife <= 0){
             Drop drop = b.blocktodrop();
-            MyWorld.drops.add(drop);
-            MyWorld.tilesMap.put(tile, null);
+            MiningWorld.drops.add(drop);
+            MiningWorld.tilesMap.put(tile, null);
         }
 
     }
 
     public void resetBlock(int x, int y) {
-        Block b = MyWorld.tilesMap.get(new Cell(x,y));
+        if(current_mode == GameMode.COMBAT_MODE) return;
+
+        Block b = MiningWorld.tilesMap.get(new Cell(x,y));
         if(b == null){
             return;
         }
@@ -168,10 +184,12 @@ public class Player extends Sprite{
     }
 
     public void getDrop(Drop drop){
-        MyWorld.drops.remove(drop);
+        if(current_mode == GameMode.COMBAT_MODE) return;
+
+        MiningWorld.drops.remove(drop);
         addToInventory(drop);
         drop.setAlpha(0);
-        MyWorld.bodiesToremove.add(drop.getBody());
+        MiningWorld.bodiesToremove.add(drop.getBody());
 
 
         //para faster ato game, only update HUD when naa ray changes, not every frame
@@ -200,8 +218,11 @@ public class Player extends Sprite{
     }
 
     public void syncHudInventory(){
-        if(hud == null) return;
         hud.update(0, inventory, currentItem);
+    }
+
+    public void syncInventoryHud(){
+        hud.update(0, inventory);
     }
 
 
@@ -249,5 +270,17 @@ public class Player extends Sprite{
 
     public void setCurrentItem(int currentItem) {
         this.currentItem = currentItem;
+    }
+
+    public Vector2 getPosition(){
+        return b2body.getPosition();
+    }
+
+    public void setCurrent_mode(GameMode current_mode) {
+        this.current_mode = current_mode;
+    }
+
+    public Pair<Item, Integer> currentItemPair(){
+        return inventory.get(currentItem);
     }
 }

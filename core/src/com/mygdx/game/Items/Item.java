@@ -1,7 +1,7 @@
 package com.mygdx.game.Items;
 
 import com.badlogic.gdx.graphics.Texture;
-import org.w3c.dom.Text;
+
 
 public abstract class Item {
     private String name;
@@ -28,6 +28,5 @@ public abstract class Item {
     public void setName(String name) {
         this.name = name;
     }
-
 
 }

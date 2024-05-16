@@ -23,4 +23,8 @@ public class BoxActor extends Group {
         this.backgroundTexture = texture;
 
     }
+
+    public Texture getBackgroundTexture() {
+        return backgroundTexture;
+    }
 }
