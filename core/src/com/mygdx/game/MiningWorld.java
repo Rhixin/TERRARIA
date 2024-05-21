@@ -22,6 +22,7 @@ import com.mygdx.game.Screens.Hud;
 import com.mygdx.game.Block.Block;
 import com.mygdx.game.Screens.MerchantBoard;
 import com.mygdx.game.Sprites.Drop;
+import com.mygdx.game.Sprites.GameMode;
 import com.mygdx.game.Sprites.Merchant;
 import com.mygdx.game.Sprites.Player;
 
@@ -108,6 +109,10 @@ public class MiningWorld extends GameWorld{
             player.getB2body().applyForceToCenter(new Vector2(0, -600 ), true);
         }
         //------------------------------------------------------------------------------
+
+        if(player.getPosition(). x >= 830 && player.getPosition().x <= 848){
+            Terraria.gameMode = GameMode.YEAR_ONE_MODE;
+        }
 
         world.step(1/60f,6, 2);
     }

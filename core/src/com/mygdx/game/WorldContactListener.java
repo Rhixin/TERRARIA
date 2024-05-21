@@ -1,10 +1,10 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.physics.box2d.*;
-import com.mygdx.game.Sprites.Drop;
-import com.mygdx.game.Sprites.Player;
-import com.mygdx.game.Sprites.WeaponObject;
-import com.mygdx.game.Sprites.YearOneBoss;
+import com.mygdx.game.Sprites.*;
+import com.mygdx.game.Sprites.Bullets.Missile;
+
+import java.time.Year;
 
 public class WorldContactListener implements ContactListener {
     GameWorld world;
@@ -34,16 +34,29 @@ public class WorldContactListener implements ContactListener {
 
         if(fixtureA.getUserData() instanceof WeaponObject && fixtureB.getUserData() instanceof YearOneBoss){
             YearOneBoss boss = (YearOneBoss) fixtureB.getUserData();
-            boss.life -= 20;
-            System.out.println("Lifee: " + boss.life);
+            WeaponObject weapon = (WeaponObject) fixtureA.getUserData();
+            boss.life -= weapon.getDamage();
+
         }
 
-        if(fixtureB.getUserData() instanceof WeaponObject && fixtureA.getUserData() instanceof YearOneBoss){
-            YearOneBoss boss = (YearOneBoss) fixtureA.getUserData();
-            boss.life -= 1;
-            System.out.println("Lifee: " + boss.life);
-        }
+        if(fixtureA.getUserData() instanceof Projectile && fixtureB.getUserData() instanceof Player){
+            Player player = (Player) fixtureB.getUserData();
 
+
+            Projectile projectile = (Projectile) fixtureA.getUserData();
+            player.setLife(player.getLife() - projectile.getDamage());
+
+            YearOneWorld.bodiesToremove.add(projectile);
+
+        }
+        if(fixtureB.getUserData() instanceof Projectile && fixtureA.getUserData() instanceof Player){
+            Player player = (Player) fixtureA.getUserData();
+
+            Projectile projectile = (Projectile) fixtureB.getUserData();
+            player.setLife(player.getLife() - projectile.getDamage());
+
+            YearOneWorld.bodiesToremove.add(projectile);
+        }
 
 
     }

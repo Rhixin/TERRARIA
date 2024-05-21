@@ -5,5 +5,6 @@ public enum GameMode {
     COMBAT_MODE,
     VULNERABLE_MODE,
     ATTACKING_MODE,
-    DEAD_MODE
+    DEAD_MODE,
+    YEAR_ONE_MODE
 }

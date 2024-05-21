@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Helper.BoxActor;
+import com.mygdx.game.Helper.HealthBar;
 import com.mygdx.game.Helper.Pair;
 import com.mygdx.game.Inventory.Draggable;
 import com.mygdx.game.Inventory.InventoryBox;
@@ -27,6 +28,8 @@ public class Hud {
     private ArrayList<InventoryBox> inventoryBoxDisplay = new ArrayList<>(8);
     private ArrayList<Pair<Item, Integer>> player_items;
 
+    public HealthBar healthBarPlayer;
+
     public Hud(SpriteBatch batch, ArrayList<Pair<Item, Integer>> player_items){
         this.player_items = player_items;
         this.viewport = new FitViewport(Terraria.V_WIDTH / Terraria.PPM, Terraria.V_HEIGHT / Terraria.PPM, new OrthographicCamera());
@@ -38,16 +41,16 @@ public class Hud {
             ItemBox itembox;
 
             if(item == null){
-                itembox = new ItemBox(prev + 7, Terraria.V_HEIGHT - 48);
+                itembox = new ItemBox(prev + 7, Terraria.V_HEIGHT - 87);
             } else {
-                itembox = new ItemBox(item, prev + 7, Terraria.V_HEIGHT - 48);
+                itembox = new ItemBox(item, prev + 7, Terraria.V_HEIGHT - 87);
             }
 
             InventoryBox box = new InventoryBox(itembox);
 
             box.setSize(40,40);
             box.itembox.setSize(25,25);
-            box.setPosition(prev, Terraria.V_HEIGHT - 55);
+            box.setPosition(prev, Terraria.V_HEIGHT - 94);
             box.itembox.initLabel();
             prev += 55;
 
@@ -57,6 +60,12 @@ public class Hud {
             stage.addActor(box.itembox);
             stage.addActor(box.itembox.countLabel);
 
+        }
+
+        healthBarPlayer = new HealthBar(100);
+
+        for(int i = 0; i < 10; i++){
+            stage.addActor(healthBarPlayer.hearts.get(i));
         }
 
         inventoryBoxDisplay.get(0).setOnHoldTexture();
@@ -90,15 +99,20 @@ public class Hud {
             player_items.set(i, new Pair<>(item,count));
 
         }
+
     }
 
     public void render(float dt){
         stage.act();
         stage.draw();
 
+        healthBarPlayer.render(dt);
+
         for(InventoryBox box : inventoryBoxDisplay){
             box.itembox.render();
         }
+
+
 
     }
 

@@ -4,6 +4,7 @@ import com.badlogic.gdx.*;
 import com.mygdx.game.Screens.MiningScreen;
 import com.mygdx.game.Screens.YearOneScreen;
 import com.mygdx.game.Sprites.GameMode;
+import com.mygdx.game.Sprites.Player;
 
 public class Terraria extends Game {
 	public  static final int V_WIDTH = 800;
@@ -11,9 +12,8 @@ public class Terraria extends Game {
 
 	public static final int ZOOM_FACTOR = 1;
 	public static final float PPM = 1;
-
-	public YearOneScreen one;
-	public MiningScreen miningworld;
+	public static YearOneScreen one;
+	public static MiningScreen miningworld;
 	public static GameMode gameMode = GameMode.MINING_MODE;
 
 	@Override
@@ -30,24 +30,22 @@ public class Terraria extends Game {
 
 		System.out.println("Mine: " + scrollmine.debugg() + "\nOne: " + scrollyearone.debugg());
 		Gdx.input.setInputProcessor(new InputMultiplexer(ip1, ip2, miningworld.getWorld().getMerchantboard().getStage(), miningworld.getWorld().getPlayerListenerMine(),scrollyearone, scrollmine));
-
 	}
 
 	@Override
 	public void render () {
 		super.render();
 
-		if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)){
+		if(gameMode == GameMode.MINING_MODE){
 			setScreen(miningworld);
-			gameMode = GameMode.MINING_MODE;
 		}
 
-		if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)){
+		if(gameMode == GameMode.YEAR_ONE_MODE){
 			setScreen(one);
-			gameMode = GameMode.COMBAT_MODE;
 		}
 
 	}
+
 	
 	@Override
 	public void dispose () {

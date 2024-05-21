@@ -65,7 +65,6 @@ public class YearOneBoss extends Sprite {
             }
 
 
-            System.out.println("reset");
             current_cooldown = 0;
             return;
         }

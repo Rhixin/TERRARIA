@@ -11,7 +11,6 @@ import com.mygdx.game.Helper.Cell;
 import com.mygdx.game.Helper.Pair;
 import com.mygdx.game.Items.Item;
 import com.mygdx.game.Items.Placeable;
-
 import com.mygdx.game.Items.Weapon;
 import com.mygdx.game.Items.Weapons.PaladinItem;
 import com.mygdx.game.MiningWorld;
@@ -19,7 +18,6 @@ import com.mygdx.game.Block.Block;
 import com.mygdx.game.Screens.Hud;
 import com.mygdx.game.Sprites.WorldWeapons.Paladin;
 import com.mygdx.game.Terraria;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -37,14 +35,16 @@ public class Player extends Sprite{
     private HashSet<Body> playerDeletes;
     private int currentItem = 0;
     private Hud hud;
-
     private GameMode current_mode;
+
+    private float life;
 
     public Player (World world, Hud hud){
         super(ATLAS.findRegion("steve"));
         this.world = world;
         this.hud = hud;
         this.currentAnimationState = AnimationState.IDLE;
+        life = 100;
         current_mode = GameMode.MINING_MODE;
 
         inventory = new ArrayList<>(8);
@@ -54,11 +54,13 @@ public class Player extends Sprite{
             inventory.add(new Pair<>(null,0));
         }
 
+
         definePlayer();
 
         TextureRegion playerStand = new TextureRegion(getTexture(), 0, 20, 65, 44);
         setBounds(0,0,48 / Terraria.PPM  , 44 / Terraria.PPM );
         setRegion(playerStand);
+
 
         inventory.add(0, new Pair<>(new PaladinItem(new Paladin(world, this, getPosition().x, getPosition().y)), 1));
 
@@ -146,7 +148,6 @@ public class Player extends Sprite{
 
         MiningWorld.tilesMap.put(tile, new_block);
 
-        //para faster ato game, only update HUD when naa ray changes, not every frame
         syncHudInventory();
     }
 
@@ -190,9 +191,6 @@ public class Player extends Sprite{
         addToInventory(drop);
         drop.setAlpha(0);
         MiningWorld.bodiesToremove.add(drop.getBody());
-
-
-        //para faster ato game, only update HUD when naa ray changes, not every frame
         syncHudInventory();
     }
 
@@ -215,6 +213,17 @@ public class Player extends Sprite{
         }
 
         return false;
+    }
+
+    public void attack(float dt){
+
+        Item weapon =  currentItemPair().getFirst();
+        if(weapon instanceof Weapon){
+            WeaponObject wpo = ((Weapon) weapon).getWeaponObject();
+            wpo.useWeapon(dt);
+        }
+
+        setCurrent_mode(GameMode.ATTACKING_MODE);
     }
 
     public void syncHudInventory(){
@@ -282,5 +291,13 @@ public class Player extends Sprite{
 
     public Pair<Item, Integer> currentItemPair(){
         return inventory.get(currentItem);
+    }
+
+    public float getLife() {
+        return life;
+    }
+
+    public void setLife(float life) {
+        this.life = life;
     }
 }

@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Helper.AnimationState;
@@ -39,20 +40,16 @@ public class YearOneWorld extends GameWorld{
     private Viewport gamePort;
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
-    public static HashMap<Vector2, Block> tilesMap = new HashMap<>();
-    public static ArrayList<Drop> drops = new ArrayList<>();
     private World world;
     private Box2DDebugRenderer b2dr;
     private Player player;
     private YearOneBoss boss;
     private Hud hud;
     private ArrayList<SpriteBatch> spriteBatches;
-    public static HashSet<Missile> bodiesToremove;
-
-    private MyInputProcessorFactory.MyInputListenerA playerListenerMine;
+    public static HashSet<Projectile> bodiesToremove;
     private MyInputProcessorFactory.MyInputListenerB playerListenerScroll;
-
     private MiningWorld past_world;
+
 
     public YearOneWorld(MiningWorld mineworld) {
         this.past_world = mineworld;
@@ -78,21 +75,23 @@ public class YearOneWorld extends GameWorld{
         for(int i = 0; i < 8; i++){
             temp.add(new Pair<>(null,0));
         }
+
         hud = new Hud(spriteBatches.get(3),temp);
+
 
         player = new Player(world, hud);
         player.getB2body().setTransform(new Vector2(320,320), 0);
         player.setCurrent_mode(GameMode.COMBAT_MODE);
 
-        //Paladin p = new Paladin(world,player,  320, 320);
-
         boss = new YearOneBoss(world, 520, 500);
+
 
         MyInputProcessorFactory inputFactory = new MyInputProcessorFactory();
         playerListenerScroll = (MyInputProcessorFactory.MyInputListenerB) inputFactory.processInput(this, "B", player);
 
         WorldContactListener contactListener = new WorldContactListener(this);
         world.setContactListener(contactListener);
+
     }
 
     public void update(float dt){
@@ -101,16 +100,19 @@ public class YearOneWorld extends GameWorld{
         player.update(dt);
         boss.update(dt);
 
+        if(player.getLife() <= 0){
+            Terraria.gameMode = GameMode.MINING_MODE;
+        }
+
         if(!world.isLocked()){
-            for(Missile b : bodiesToremove){
-                if(b.getBody().getPosition().y <= player.getPosition().y){
+            for(Projectile b : bodiesToremove){
+                if(b != null){
                     world.destroyBody(b.getBody());
                     b.setAlpha(0);
                     bodiesToremove.remove(b);
                     break;
                 }
             }
-
         }
 
         //todo fix gravity
@@ -121,6 +123,8 @@ public class YearOneWorld extends GameWorld{
         //------------------------------------------------------------------------------
 
         world.step(1/60f,6, 2);
+
+        hud.healthBarPlayer.update(player.getLife());
     }
 
     public void render(float delta){
@@ -133,6 +137,7 @@ public class YearOneWorld extends GameWorld{
         renderer.render();
 
         player.render(delta);
+        boss.render(delta);
 
         for(int i = 0; i < 10; i++){
 
@@ -148,24 +153,11 @@ public class YearOneWorld extends GameWorld{
                 sb.setProjectionMatrix(gamecam.combined);
                 sb.begin();
 
-                for(Block block : tilesMap.values()){
-                    if(block != null){
-                        block.render(sb);
-                    }
-
-                }
 
                 sb.end();
             } else if (i == 3) {
                 sb.setProjectionMatrix(gamecam.combined);
                 sb.begin();
-
-                for (Drop drop : drops){
-                    drop.render(delta);
-                    drop.draw(sb);
-                }
-
-
                 sb.end();
             } else if (i == 4){
                 sb.begin();
@@ -175,6 +167,7 @@ public class YearOneWorld extends GameWorld{
         }
 
         b2dr.render(world,gamecam.combined);
+
 
 
     }
@@ -218,24 +211,11 @@ public class YearOneWorld extends GameWorld{
 
         if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
             Missile m = boss.attack(dt);
-            if(m != null){
-                bodiesToremove.add(m);
-            }
         }
-
-
 
         if(Gdx.input.isKeyPressed(Input.Keys.Q)){
 
-            Item weapon =  player.currentItemPair().getFirst();
-            if(weapon instanceof Weapon){
-                WeaponObject wpo = ((Weapon) weapon).getWeaponObject();
-
-                wpo.useWeapon(dt);
-
-            }
-
-            player.setCurrent_mode(GameMode.ATTACKING_MODE);
+            player.attack(dt);
         }
 
 
@@ -276,5 +256,9 @@ public class YearOneWorld extends GameWorld{
 
     public MyInputProcessorFactory.MyInputListenerB getPlayerListenerScroll() {
         return playerListenerScroll;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }

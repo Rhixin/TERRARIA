@@ -6,7 +6,7 @@ import com.badlogic.gdx.physics.box2d.*;
 
 public abstract class WeaponObject extends Sprite {
 
-    public float damage;
+    protected float damage;
     public float width, height, angle;
     public float speed;
 
@@ -20,4 +20,6 @@ public abstract class WeaponObject extends Sprite {
     public abstract void render(float delta);
 
     public abstract void useWeapon(float delta);
+
+    public abstract float getDamage();
 }

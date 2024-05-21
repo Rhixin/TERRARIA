@@ -10,25 +10,9 @@ public abstract class Projectile extends Sprite {
     public float speed;
 
     private World world;
-    private Body b2body;
+    protected Body b2body;
 
-    public void defineBody(World world, float WorldX, float WorldY) {
-        setPosition(WorldX, WorldY);
-        BodyDef bdef = new BodyDef();
-        bdef.type = BodyDef.BodyType.DynamicBody;
-        bdef.position.set(WorldX, WorldY);
 
-        b2body = world.createBody(bdef);
-
-        FixtureDef fdef = new FixtureDef();
-        PolygonShape shape = new PolygonShape();
-
-        shape.setAsBox(width / 2, height / 2);
-        fdef.shape = shape;
-        fdef.friction = 30f;
-
-        b2body.createFixture(fdef).setUserData(this);
-    }
 
 
     public Body getBody(){
@@ -39,5 +23,7 @@ public abstract class Projectile extends Sprite {
     public void render(float delta) {
         setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
     }
+
+    public abstract float getDamage();
 
 }

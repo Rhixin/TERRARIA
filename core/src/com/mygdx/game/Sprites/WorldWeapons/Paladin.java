@@ -41,6 +41,7 @@ public class Paladin extends WeaponObject {
 
     @Override
     public void useWeapon(float delta) {
+
         if(angle > 360){
             angle = 0;
         }
@@ -52,6 +53,11 @@ public class Paladin extends WeaponObject {
 
         setPosition(newX, newY);
         getBody().setTransform(newX, newY, angle);
+    }
+
+    @Override
+    public float getDamage() {
+        return damage;
     }
 
 
