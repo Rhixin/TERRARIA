@@ -137,7 +137,6 @@ public class YearOneWorld extends GameWorld{
         renderer.render();
 
         player.render(delta);
-        boss.render(delta);
 
         for(int i = 0; i < 10; i++){
 
@@ -168,8 +167,7 @@ public class YearOneWorld extends GameWorld{
 
         b2dr.render(world,gamecam.combined);
 
-
-
+        boss.render(delta);
     }
 
     private void GameCamUpdate(){
