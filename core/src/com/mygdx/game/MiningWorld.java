@@ -18,13 +18,12 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Helper.Pair;
 import com.mygdx.game.Helper.WorldCreator;
 import com.mygdx.game.Items.Item;
+import com.mygdx.game.Items.Weapon;
+import com.mygdx.game.Screens.BlackSmithBoard;
 import com.mygdx.game.Screens.Hud;
 import com.mygdx.game.Block.Block;
 import com.mygdx.game.Screens.MerchantBoard;
-import com.mygdx.game.Sprites.Drop;
-import com.mygdx.game.Sprites.GameMode;
-import com.mygdx.game.Sprites.Merchant;
-import com.mygdx.game.Sprites.Player;
+import com.mygdx.game.Sprites.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,6 +41,7 @@ public class MiningWorld extends GameWorld{
     private Box2DDebugRenderer b2dr;
     private Player player;
     private Merchant merchant;
+    private Blacksmith blacksmith;
     private Hud hud;
     private ArrayList<SpriteBatch> spriteBatches;
     public static HashSet<Body> bodiesToremove;
@@ -75,6 +75,10 @@ public class MiningWorld extends GameWorld{
         hud = new Hud(spriteBatches.get(3),temp);
 
         player = new Player(world, hud);
+
+
+        blacksmith = new Blacksmith(world, spriteBatches.get(3), player);
+
         merchant = new Merchant(world, spriteBatches.get(3), player);
 
         MyInputProcessorFactory inputFactory = new MyInputProcessorFactory();
@@ -90,9 +94,13 @@ public class MiningWorld extends GameWorld{
 
         handleInput(dt);
         player.update(dt);
-        merchant.update(dt);
-        merchant.merchantboard.update(player.getPosition(), merchant.getPosition());
 
+        blacksmith.update(dt);
+        merchant.update(dt);
+
+
+        Blacksmith.blackSmithBoard.update(player.getPosition(), blacksmith.getPosition());
+        Merchant.merchantboard.update(player.getPosition(), merchant.getPosition());
 
         if(!world.isLocked()){
             for(Body b : bodiesToremove){
@@ -124,6 +132,7 @@ public class MiningWorld extends GameWorld{
         renderer.render();
 
         player.render(delta);
+        blacksmith.render(delta);
         merchant.render(delta);
 
 
@@ -134,6 +143,7 @@ public class MiningWorld extends GameWorld{
                 sb.setProjectionMatrix(gamecam.combined);
                 sb.begin();
                 player.draw(sb);
+                blacksmith.draw(sb);
                 merchant.draw(sb);
                 sb.end();
             } else if (i == 2) {
@@ -164,7 +174,9 @@ public class MiningWorld extends GameWorld{
                 sb.end();
             } else if (i == 4){
                 sb.begin();
-                merchant.merchantboard.render(delta);
+
+                Blacksmith.blackSmithBoard.render(delta);
+                Merchant.merchantboard.render(delta);
                 hud.render(delta);
                 sb.end();
             }
@@ -174,7 +186,7 @@ public class MiningWorld extends GameWorld{
     }
 
     private void GameCamUpdate(){
-        if(player.getB2body().getPosition().x >= 400){
+        if(player.getB2body().getPosition().x >= 400 && player.getB2body().getPosition().x <= 4045){
             gamecam.position.x = player.getB2body().getPosition().x;
         }
 
@@ -240,12 +252,27 @@ public class MiningWorld extends GameWorld{
         return merchant.merchantboard;
     }
 
+    public BlackSmithBoard getBlacksmithBoard(){
+        return blacksmith.blackSmithBoard;
+    }
+
     public MyInputProcessorFactory.MyInputListenerA getPlayerListenerMine() {
         return playerListenerMine;
     }
 
     public MyInputProcessorFactory.MyInputListenerB getPlayerListenerScroll() {
         return playerListenerScroll;
+    }
+
+    public void syncPlayerToPlayerInventory(Player player2, World world){
+
+        ArrayList<Pair<Item, Integer>> new_inventory = new ArrayList<>();
+
+        for(Pair<Item,Integer> p : player.getInventory()){
+            new_inventory.add(p);
+        }
+
+        player2.setInventory(new_inventory);
     }
 }
 

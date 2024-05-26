@@ -13,6 +13,7 @@ import com.mygdx.game.Items.Item;
 import com.mygdx.game.Items.Placeable;
 import com.mygdx.game.Items.Weapon;
 import com.mygdx.game.Items.Weapons.PaladinItem;
+import com.mygdx.game.Items.Weapons.PistolItem;
 import com.mygdx.game.MiningWorld;
 import com.mygdx.game.Block.Block;
 import com.mygdx.game.Screens.Hud;
@@ -54,6 +55,9 @@ public class Player extends Sprite{
             inventory.add(new Pair<>(null,0));
         }
 
+        inventory.add(0,new Pair<>(new PaladinItem(), 1));
+        inventory.add(1,new Pair<>(new PistolItem(), 1));
+
 
         definePlayer();
 
@@ -61,8 +65,6 @@ public class Player extends Sprite{
         setBounds(0,0,48 / Terraria.PPM  , 44 / Terraria.PPM );
         setRegion(playerStand);
 
-
-        inventory.add(0, new Pair<>(new PaladinItem(new Paladin(world, this, getPosition().x, getPosition().y)), 1));
 
         initAnimations();
     }
@@ -216,12 +218,13 @@ public class Player extends Sprite{
         return false;
     }
 
-    public void attack(float dt){
+    public void attack(float dt, float x, float y){
 
         Item weapon =  currentItemPair().getFirst();
+
         if(weapon instanceof Weapon){
-            WeaponObject wpo = ((Weapon) weapon).getWeaponObject();
-            wpo.useWeapon(dt);
+            WeaponObject wpo = ((Weapon) weapon).getWeaponObject(world, this);
+            wpo.useWeapon(dt, x,y);
         }
 
         setCurrent_mode(GameMode.ATTACKING_MODE);
@@ -300,5 +303,9 @@ public class Player extends Sprite{
 
     public void setLife(float life) {
         this.life = life;
+    }
+
+    public void setInventory(ArrayList<Pair<Item, Integer>> inventory) {
+        this.inventory = inventory;
     }
 }

@@ -1,17 +1,17 @@
-package com.mygdx.game.Sprites.Bullets;
+package com.mygdx.game.Sprites.BossAttacks;
 
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.physics.box2d.*;
+import com.mygdx.game.Items.Item;
 import com.mygdx.game.Sprites.Projectile;
 
 public class Missile extends Projectile {
 
     public Missile(World world, float WorldX, float WorldY){
+        this.world = world;
         damage = 5f;
         width = 20;
-        height = 20;
+        height = 60;
         speed = 5;
         defineBody(world, WorldX, WorldY);
     }
@@ -39,4 +39,13 @@ public class Missile extends Projectile {
     public float getDamage() {
         return damage;
     }
+
+    public Body getBody(){
+        return b2body;
+    }
+
+    public void render(float delta) {
+
+    }
+
 }

@@ -40,10 +40,6 @@ public class Drop extends Sprite {
         b2body.createFixture(fdef).setUserData(this);
     }
 
-    public void update(float delta) {
-
-    }
-
     public Body getBody(){
         return b2body;
     }

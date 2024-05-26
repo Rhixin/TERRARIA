@@ -15,8 +15,6 @@ public class MiningScreen implements Screen {
     public void show() {
     }
 
-
-
     @Override
     public void render(float delta) {
         world.update(delta);
@@ -28,6 +26,7 @@ public class MiningScreen implements Screen {
         world.updateGameport(width, height);
         world.getHudStage().getViewport().update(width, height, true);
         world.getMerchantboard().getViewport().update(width, height, true);
+        world.getBlacksmithBoard().getViewport().update(width, height, true);
     }
 
     @Override

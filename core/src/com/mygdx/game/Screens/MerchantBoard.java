@@ -36,7 +36,6 @@ public class MerchantBoard {
 
     private InventoryBox resourceBox;
     private InventoryBox coinBox;
-
     public boolean isHidden = true;
 
     private Player player;

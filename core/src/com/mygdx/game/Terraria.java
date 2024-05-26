@@ -31,7 +31,7 @@ public class Terraria extends Game {
 		MyInputProcessorFactory.MyInputListenerB scrollyearone = one.getWorld().getPlayerListenerScroll();
 
 		System.out.println("Mine: " + scrollmine.debugg() + "\nOne: " + scrollyearone.debugg());
-		Gdx.input.setInputProcessor(new InputMultiplexer(ip1, ip2, miningworld.getWorld().getMerchantboard().getStage(), miningworld.getWorld().getPlayerListenerMine(),scrollyearone, scrollmine));
+		Gdx.input.setInputProcessor(new InputMultiplexer(ip1, ip2, miningworld.getWorld().getMerchantboard().getStage(), miningworld.getWorld().getBlacksmithBoard().getStage(), miningworld.getWorld().getPlayerListenerMine(),scrollyearone, scrollmine));
 	}
 
 	@Override

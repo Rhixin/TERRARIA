@@ -9,11 +9,8 @@ public abstract class Projectile extends Sprite {
     public float width, height;
     public float speed;
 
-    private World world;
+    protected World world;
     protected Body b2body;
-
-
-
 
     public Body getBody(){
         return b2body;

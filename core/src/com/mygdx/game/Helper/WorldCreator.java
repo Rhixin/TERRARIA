@@ -121,7 +121,7 @@ public class WorldCreator {
 
             shape.setAsBox(rect.getWidth() / 2 , rect.getHeight() / 2);
             fdef.shape = shape;
-            body.createFixture(fdef);
+            body.createFixture(fdef).setUserData("PLATFORM");
         }
 
     }
