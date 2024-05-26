@@ -184,17 +184,18 @@ public class Player extends Sprite{
         b.breaklife = 100;
     }
 
-    public void getDrop(Drop drop){
+    public void getDrop(Drop drop, int count){
         if(current_mode == GameMode.COMBAT_MODE) return;
 
         MiningWorld.drops.remove(drop);
-        addToInventory(drop);
+        addToInventory(drop, count);
         drop.setAlpha(0);
         MiningWorld.bodiesToremove.add(drop.getBody());
         syncHudInventory();
     }
 
-    private boolean addToInventory(Drop drop){
+
+    private boolean addToInventory(Drop drop, int count){
         int free_place = -1;
         int ctr = 0;
         for(Pair<Item, Integer> p : inventory){
@@ -203,9 +204,9 @@ public class Player extends Sprite{
             }
 
             if (ctr == 7 && p.getFirst() == null){
-                inventory.set(free_place, new Pair<>(drop.getItem(), 1));
+                inventory.set(free_place, new Pair<>(drop.getItem(), count));
             } else if(p.getFirst() != null && p.getFirst().getClass()  == drop.getItem().getClass()){
-                p.setSecond(p.getSecond() + 1);
+                p.setSecond(p.getSecond() + count);
                 break;
             }
 

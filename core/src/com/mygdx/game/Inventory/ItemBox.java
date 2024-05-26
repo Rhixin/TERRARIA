@@ -137,20 +137,25 @@ public class ItemBox extends BoxActor implements Draggable {
             public void dragStop(InputEvent event, float x, float y, int pointer) {
                 if (dragging) {
                     Actor actor1 = Merchant.merchantboard.getResourceBox();
+
+
                     Rectangle bounds1 = new Rectangle(actor1.getX(), actor1.getY(), actor1.getWidth(), actor1.getHeight());
+
                     Rectangle bounds2 = new Rectangle(getX(), getY(), getWidth(), getHeight());
 
                     if(bounds1.overlaps(bounds2) && !Merchant.merchantboard.isHidden){
-                        Merchant.merchantboard.swapItems(getMyself());
+                        Merchant.merchantboard.resourceBoxSwap(getMyself());
                         Merchant.merchantboard.showTrade();
-
-
                     }
+
+
 
                     setPosition(originalX, originalY);
                     countLabel.setPosition(originalX - 5, originalY - 5);
                     dragging = false;
                 }
+
+
             }
         });
     }

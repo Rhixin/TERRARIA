@@ -168,6 +168,7 @@ public class MyInputProcessorFactory {
                 return false;
             }
 
+
             if (amountY < 0) {
                 player.setCurrentItem( (player.getCurrentItem() + 1) % 8);
             } else {

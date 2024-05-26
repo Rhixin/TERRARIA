@@ -70,7 +70,6 @@ public class Merchant extends Sprite {
         fdef.shape = shape;
         fdef.friction = 20f;
 
-
         b2body.createFixture(fdef).setUserData(this);
     }
 

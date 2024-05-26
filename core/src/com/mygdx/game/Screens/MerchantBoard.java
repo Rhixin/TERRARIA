@@ -9,9 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -28,6 +26,7 @@ import com.mygdx.game.Inventory.ItemBox;
 import com.mygdx.game.Items.Coin;
 import com.mygdx.game.Items.Item;
 import com.mygdx.game.Items.Sellable;
+import com.mygdx.game.Sprites.Drop;
 import com.mygdx.game.Sprites.Player;
 import com.mygdx.game.Terraria;
 
@@ -72,6 +71,21 @@ public class MerchantBoard {
         stage.addActor(resourceBox.itembox.countLabel);
         stage.addActor(coinBox.itembox);
         stage.addActor(coinBox.itembox.countLabel);
+
+        coinBox.itembox.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                int count = coinBox.itembox.getCount();
+                if(count != 0){
+                    player.getDrop(new Drop(player.getB2body().getWorld(), 1,1, coinBox.itembox.getItem()), count);
+                    coinBox.itembox.setCount(0);
+                    resourceBox.itembox.setCount(0);
+                    resourceBox.itembox.setItem(null);
+
+                }
+                return false;
+            }
+        });
 
     }
     public Stage getStage(){
@@ -131,8 +145,20 @@ public class MerchantBoard {
         return resourceBox;
     }
 
-    public void swapItems(ItemBox itembox1){
+    public void resourceBoxSwap(ItemBox itembox1){
         ItemBox itembox2 = resourceBox.itembox;
+        Item itemTemp = itembox1.getItem();
+        int countTemp = itembox1.getCount();
+
+        itembox1.setItem(itembox2.getItem());
+        itembox1.setCount(itembox2.getCount());
+
+        itembox2.setItem(itemTemp);
+        itembox2.setCount(countTemp);
+    }
+
+    public void coinBoxSwap(ItemBox itembox1){
+        ItemBox itembox2 = coinBox.itembox;
         Item itemTemp = itembox1.getItem();
         int countTemp = itembox1.getCount();
 

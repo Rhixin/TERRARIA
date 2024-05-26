@@ -22,14 +22,14 @@ public class WorldContactListener implements ContactListener {
             Player player = (Player) fixtureA.getUserData();
             Drop drop = (Drop) fixtureB.getUserData();
 
-            player.getDrop(drop);
+            player.getDrop(drop, 1);
         }
 
         if(PlayerAndDrop(fixtureB, fixtureA)){
             Player player = (Player) fixtureB.getUserData();
             Drop drop = (Drop) fixtureA.getUserData();
 
-            player.getDrop(drop);
+            player.getDrop(drop, 1);
         }
 
         if(fixtureA.getUserData() instanceof WeaponObject && fixtureB.getUserData() instanceof YearOneBoss){
@@ -55,6 +55,16 @@ public class WorldContactListener implements ContactListener {
             Projectile projectile = (Projectile) fixtureB.getUserData();
             player.setLife(player.getLife() - projectile.getDamage());
 
+            YearOneWorld.bodiesToremove.add(projectile);
+        }
+
+        if(fixtureB.getUserData() instanceof Projectile && !(fixtureA.getUserData() instanceof Projectile)){
+            Projectile projectile = (Projectile) fixtureB.getUserData();
+            YearOneWorld.bodiesToremove.add(projectile);
+        }
+
+        if(fixtureA.getUserData() instanceof Projectile && !(fixtureB.getUserData() instanceof Projectile)){
+            Projectile projectile = (Projectile) fixtureA.getUserData();
             YearOneWorld.bodiesToremove.add(projectile);
         }
 

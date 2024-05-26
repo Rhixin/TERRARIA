@@ -6,6 +6,8 @@ import com.mygdx.game.Screens.YearOneScreen;
 import com.mygdx.game.Sprites.GameMode;
 import com.mygdx.game.Sprites.Player;
 
+import java.security.Key;
+
 public class Terraria extends Game {
 	public  static final int V_WIDTH = 800;
 	public  static final int V_HEIGHT = 400;
@@ -36,12 +38,23 @@ public class Terraria extends Game {
 	public void render () {
 		super.render();
 
-		if(gameMode == GameMode.MINING_MODE){
+//		if(gameMode == GameMode.MINING_MODE){
+//			one.getWorld().getPlayer().setLife(100);
+//			setScreen(miningworld);
+//		}
+//
+//		if(gameMode == GameMode.YEAR_ONE_MODE){
+//			setScreen(one);
+//		}
+
+		if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_1) ){
 			setScreen(miningworld);
+			gameMode = GameMode.MINING_MODE;
 		}
 
-		if(gameMode == GameMode.YEAR_ONE_MODE){
+		if(Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)){
 			setScreen(one);
+			gameMode = GameMode.YEAR_ONE_MODE;
 		}
 
 	}

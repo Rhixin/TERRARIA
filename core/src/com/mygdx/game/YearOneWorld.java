@@ -98,7 +98,7 @@ public class YearOneWorld extends GameWorld{
 
         handleInput(dt);
         player.update(dt);
-        boss.update(dt);
+        boss.update(dt, player.getPosition().x, player.getPosition().y);
 
         if(player.getLife() <= 0){
             Terraria.gameMode = GameMode.MINING_MODE;
@@ -181,7 +181,6 @@ public class YearOneWorld extends GameWorld{
 
     public void handleInput(float dt){
 
-
         if(Gdx.input.isKeyJustPressed(Input.Keys.W)){
             player.getB2body().applyLinearImpulse(new Vector2(0, 900f), player.getB2body().getWorldCenter(), true);
             player.getB2body().applyLinearImpulse(new Vector2(0, 900f), player.getB2body().getWorldCenter(), true);
@@ -213,12 +212,9 @@ public class YearOneWorld extends GameWorld{
             Missile m = boss.attack(dt);
         }
 
-        if(Gdx.input.isKeyPressed(Input.Keys.Q)){
-
+        if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
             player.attack(dt);
         }
-
-
 
     }
 

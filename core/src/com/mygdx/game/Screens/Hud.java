@@ -97,7 +97,6 @@ public class Hud {
             inventoryBoxDisplay.get(i).itembox.setItem(player_item.getFirst(), player_item.getSecond());
 
             player_items.set(i, new Pair<>(item,count));
-
         }
 
     }
@@ -109,7 +108,7 @@ public class Hud {
         healthBarPlayer.render(dt);
 
         for(InventoryBox box : inventoryBoxDisplay){
-            box.itembox.render();
+                box.itembox.render();
         }
 
 

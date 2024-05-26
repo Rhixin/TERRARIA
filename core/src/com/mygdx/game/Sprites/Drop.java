@@ -17,6 +17,8 @@ public class Drop extends Sprite {
         defineBody(WorldX, WorldY);
     }
 
+
+
     private void defineBody(float WorldX, float WorldY) {
         setPosition(WorldX, WorldY);
         BodyDef bdef = new BodyDef();

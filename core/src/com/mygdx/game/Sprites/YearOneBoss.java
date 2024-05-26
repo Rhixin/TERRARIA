@@ -7,6 +7,8 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.Items.Item;
 import com.mygdx.game.Sprites.Bullets.Missile;
 
+import java.util.Random;
+
 public class YearOneBoss extends Sprite {
     private World world;
     private Body b2body;
@@ -19,15 +21,16 @@ public class YearOneBoss extends Sprite {
     private final float attackInterval = 0.2f;
 
 
-    private static final Texture t = new Texture("RAW/item_box_hold.png");
+    private static final Texture t1 = new Texture("RAW/attack_serato.png");
+    private static final Texture t2 = new Texture("RAW/break_serato.png");
     private static final float width = 100, height = 100;
 
     public float life;
 
     public YearOneBoss(World world, float WorldX, float WorldY){
-        super(t);
+        super(t1);
         this.world = world;
-        life = 200;
+        life = 1000;
         defineBody(WorldX, WorldY);
     }
 
@@ -50,18 +53,29 @@ public class YearOneBoss extends Sprite {
         b2body.createFixture(fdef).setUserData(this);
     }
 
-    public void update(float delta) {
+    public void update(float delta, float x, float y) {
 
         if(mode == GameMode.DEAD_MODE) return;
+
+        if(mode == GameMode.COMBAT_MODE){
+                attack(delta);
+                if(x >= b2body.getPosition().x){
+                    b2body.applyLinearImpulse(new Vector2(80f, 0), b2body.getWorldCenter(), true);
+                } else {
+                    b2body.applyLinearImpulse(new Vector2(-80f, 0), b2body.getWorldCenter(), true);
+                }
+        }
 
         if(current_cooldown >= cooldown){
             if(mode == GameMode.COMBAT_MODE){
                 mode = GameMode.VULNERABLE_MODE;
+                setTexture(t2);
                 b2body.setGravityScale(1f);
             } else {
                 mode = GameMode.COMBAT_MODE;
                 b2body.setGravityScale(0f);
                 b2body.setTransform(new Vector2(520,520), 0);
+                setTexture(t1);
             }
 
 
@@ -91,8 +105,10 @@ public class YearOneBoss extends Sprite {
             return null;
         }
 
+        int random = new Random().nextInt((int) width + 80);
+
         if(timeSinceLastAttack >= attackInterval){
-            Missile m = new Missile(world, b2body.getPosition().x - width / 2, b2body.getPosition().y - height - 20);
+            Missile m = new Missile(world, b2body.getPosition().x - width / 2 + random - 30, b2body.getPosition().y - height - 20);
             //new Missile(world, b2body.getPosition().x - width / 2, b2body.getPosition().y - height - 20);
             timeSinceLastAttack = 0f;
             return m;

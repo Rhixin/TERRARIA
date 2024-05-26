@@ -49,7 +49,6 @@ public class MiningWorld extends GameWorld{
     private MyInputProcessorFactory.MyInputListenerA playerListenerMine;
     private MyInputProcessorFactory.MyInputListenerB playerListenerScroll;
 
-
     public MiningWorld() {
         gamecam = new OrthographicCamera();
         gamePort = new FitViewport(Terraria.V_WIDTH, Terraria.V_HEIGHT,gamecam);
@@ -110,9 +109,7 @@ public class MiningWorld extends GameWorld{
         }
         //------------------------------------------------------------------------------
 
-        if(player.getPosition(). x >= 830 && player.getPosition().x <= 848){
-            Terraria.gameMode = GameMode.YEAR_ONE_MODE;
-        }
+
 
         world.step(1/60f,6, 2);
     }
@@ -177,7 +174,10 @@ public class MiningWorld extends GameWorld{
     }
 
     private void GameCamUpdate(){
-        gamecam.position.x = player.getB2body().getPosition().x;
+        if(player.getB2body().getPosition().x >= 400){
+            gamecam.position.x = player.getB2body().getPosition().x;
+        }
+
         gamecam.position.y = player.getB2body().getPosition().y;
         gamecam.update();
     }
@@ -201,6 +201,7 @@ public class MiningWorld extends GameWorld{
         if(Gdx.input.isKeyPressed(Input.Keys.Z) ){
             System.out.println("Player body pos in world. X,Y = " + player.getB2body().getPosition());
         }
+
 
     }
 
