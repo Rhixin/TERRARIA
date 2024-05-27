@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Helper.Pair;
+import com.mygdx.game.Helper.SoundManager;
 import com.mygdx.game.Helper.WorldCreator;
 import com.mygdx.game.Items.Item;
 import com.mygdx.game.Items.Weapon;
@@ -58,6 +59,9 @@ public class MiningWorld extends GameWorld{
         world = new World(new Vector2(0,-140f), true);
         spriteBatches = new ArrayList<>();
         bodiesToremove = new HashSet<>();
+
+        //SoundManager.playBamyamgengMusic();
+        SoundManager.playBackgroundMusic();
 
 
         for (int i = 0; i < 10; i++) {

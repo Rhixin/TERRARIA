@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Helper.Pair;
+import com.mygdx.game.Helper.SoundManager;
 import com.mygdx.game.Inventory.InventoryBox;
 import com.mygdx.game.Inventory.ItemBox;
 import com.mygdx.game.Items.Coin;

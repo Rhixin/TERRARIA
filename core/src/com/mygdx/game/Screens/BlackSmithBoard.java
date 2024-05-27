@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.Helper.SoundManager;
 import com.mygdx.game.Inventory.InventoryBox;
 import com.mygdx.game.Inventory.ItemBox;
 import com.mygdx.game.Items.Coin;
@@ -84,10 +85,11 @@ public class BlackSmithBoard {
         return stage;
     }
 
-    public void update(Vector2 playerPos, Vector2 merchantPos){
-        if(areBodiesClose(playerPos,merchantPos, 100) ){
+    public void update(Vector2 playerPos, Vector2 blacksmithPos){
+        if(areBodiesClose(playerPos,blacksmithPos, 100) ){
             show();
             isHidden = false;
+            SoundManager.playBuySomehthing();
         } else {
             hide();
             isHidden = true;
