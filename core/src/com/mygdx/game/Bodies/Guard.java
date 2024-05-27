@@ -11,6 +11,7 @@ import com.mygdx.game.Items.Coin;
 import com.mygdx.game.Items.Item;
 import com.mygdx.game.Items.Sellable;
 import com.mygdx.game.Screens.BlackSmithBoard;
+import com.mygdx.game.Screens.GuardBoard;
 import com.mygdx.game.Terraria;
 
 import java.util.ArrayList;
@@ -23,12 +24,12 @@ public class Guard extends Sprite {
     private Animation<TextureRegion> idleAnimation;
     private float stateTime = 0f;
     private ArrayList<Pair<Item, Integer>> inventory;
-    public static BlackSmithBoard blackSmithBoard;
+    public static GuardBoard blackSmithBoard;
 
     public Guard (World world, SpriteBatch batch, Player player){
         super(ATLAS.findRegion("steve"));
         this.world = world;
-        blackSmithBoard = new BlackSmithBoard(batch, player);
+        blackSmithBoard = new GuardBoard(batch, player);
 
         inventory = new ArrayList<>(8);
 
@@ -39,15 +40,15 @@ public class Guard extends Sprite {
         definePlayer();
 
         TextureRegion playerStand = new TextureRegion(getTexture(), 0, 20, 65, 44);
-        setBounds(0,0,48 / Terraria.PPM  , 44 / Terraria.PPM );
+        setBounds(0,0,58   , 44  );
         setRegion(playerStand);
 
         initAnimations();
     }
 
     private void initAnimations() {
-        Texture idleSheet = new Texture(Gdx.files.internal("RAW/blacksmith_idle.png"));
-        idleAnimation = AnimationHelper.getAnimation(1,24,idleSheet,0.25f);
+        Texture idleSheet = new Texture(Gdx.files.internal("RAW/guard_idle.png"));
+        idleAnimation = AnimationHelper.getAnimation(1,6,idleSheet,0.8f);
     }
 
     private void definePlayer() {

@@ -20,6 +20,7 @@ import com.mygdx.game.Helper.SoundManager;
 import com.mygdx.game.Helper.WorldCreator;
 import com.mygdx.game.Items.Item;
 import com.mygdx.game.Screens.BlackSmithBoard;
+import com.mygdx.game.Screens.GuardBoard;
 import com.mygdx.game.Screens.Hud;
 import com.mygdx.game.Block.Block;
 import com.mygdx.game.Screens.MerchantBoard;
@@ -263,7 +264,7 @@ public class MiningWorld extends GameWorld{
         return blacksmith.blackSmithBoard;
     }
 
-    public BlackSmithBoard getGuardBoard(){
+    public GuardBoard getGuardBoard(){
         return guard.blackSmithBoard;
     }
 

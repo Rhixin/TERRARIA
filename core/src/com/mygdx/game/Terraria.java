@@ -46,6 +46,11 @@ public class Terraria extends Game {
 			gameMode = GameMode.YEAR_ONE_MODE;
 		}
 
+		if(gameMode == GameMode.YEAR_ONE_MODE){
+			setScreen(one);
+			gameMode = GameMode.YEAR_ONE_MODE;
+		}
+
 		if(YearOneWorld.isDone){
 			setScreen(miningworld);
 			gameMode = GameMode.MINING_MODE;
@@ -58,4 +63,5 @@ public class Terraria extends Game {
 	public void dispose () {
 
 	}
+
 }

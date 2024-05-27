@@ -70,7 +70,9 @@ public class ItemBox extends BoxActor implements Draggable {
     }
 
     public void render(){
-        countLabel.setText(Integer.toString(count));
+        if(count != -1){
+            countLabel.setText(Integer.toString(count));
+        }
 
         if(item == null || item.getTexture() == null){
             setTexture(defaultTexture);
@@ -157,6 +159,10 @@ public class ItemBox extends BoxActor implements Draggable {
 
             }
         });
+    }
+
+    public void setLabelToText(String text){
+        countLabel.setText(text);
     }
 
 
