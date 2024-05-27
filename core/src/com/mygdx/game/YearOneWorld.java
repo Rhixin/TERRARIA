@@ -3,6 +3,8 @@ package com.mygdx.game;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -15,6 +17,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import com.mygdx.game.Bodies.WorldWeapons.Paladin;
 import com.mygdx.game.Helper.Pair;
 import com.mygdx.game.Helper.WorldCreator;
 import com.mygdx.game.Items.Item;
@@ -45,6 +49,9 @@ public class YearOneWorld extends GameWorld{
 
     private MyInputProcessorFactory.MyInputListenerB playerListenerScroll;
     private MiningWorld past_world;
+    public static ArrayList<Sprite> spritesToDraw;
+    private Texture t = new Texture(Gdx.files.internal("RAW/paladin.png"));
+
 
 
     public YearOneWorld(MiningWorld mineworld) {
@@ -59,6 +66,8 @@ public class YearOneWorld extends GameWorld{
         bodiesToremove = new HashSet<>();
         bullets = new ArrayList<>();
         missiles = new ArrayList<>();
+        spritesToDraw = new ArrayList<>();
+
 
         for (int i = 0; i < 10; i++) {
             SpriteBatch spriteBatch = new SpriteBatch();
@@ -104,12 +113,18 @@ public class YearOneWorld extends GameWorld{
 
         if(!world.isLocked()){
             for(Body b : bodiesToremove){
-                if(b != null){
-                    world.destroyBody(b);
-                    bodiesToremove.remove(b);
-                    break;
-                }
+                world.destroyBody(b);
             }
+
+            bodiesToremove.clear();
+        }
+
+        for(Bullet b : bullets){
+            b.update(dt);
+        }
+
+        for(Missile m : missiles){
+            m.update(dt);
         }
 
 
@@ -157,6 +172,12 @@ public class YearOneWorld extends GameWorld{
                 sb.setProjectionMatrix(gamecam.combined);
                 sb.begin();
 
+                for(Sprite s : spritesToDraw){
+                    s.draw(sb);
+                    if(s instanceof Paladin){
+                        ((Paladin) s).update(delta);
+                    }
+                }
 
                 sb.end();
             } else if (i == 4){
@@ -164,10 +185,23 @@ public class YearOneWorld extends GameWorld{
                 hud.render(delta);
 
                 sb.end();
+            } else if (i == 5){
+                sb.setProjectionMatrix(gamecam.combined);
+                sb.begin();
+                for(Bullet b : bullets){
+                    b.render(sb);
+                    b.draw(sb);
+                }
+
+                for(Missile m : missiles){
+                    m.render(sb);
+                }
+
+                sb.end();
             }
         }
 
-        b2dr.render(world,gamecam.combined);
+        //b2dr.render(world,gamecam.combined);
         boss.render(delta);
 
     }

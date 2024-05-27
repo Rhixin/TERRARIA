@@ -46,8 +46,10 @@ public class WorldContactListener implements ContactListener {
         if(fixtureA.getUserData() instanceof Bullet && fixtureB.getUserData() instanceof YearOneBoss){
             YearOneBoss boss = (YearOneBoss) fixtureB.getUserData();
             Bullet b = (Bullet) fixtureA.getUserData();
+
+//            b.dispose();
             b.setAlpha(0);
-            System.out.println(boss.life);
+            YearOneWorld.bodiesToremove.add(b.getBody());
             boss.life -= b.getDamage();
 
         }
@@ -55,7 +57,9 @@ public class WorldContactListener implements ContactListener {
         if(fixtureB.getUserData() instanceof Bullet && fixtureA.getUserData() instanceof YearOneBoss){
             YearOneBoss boss = (YearOneBoss) fixtureA.getUserData();
             Bullet b = (Bullet) fixtureB.getUserData();
+//            b.dispose();
             b.setAlpha(0);
+            YearOneWorld.bodiesToremove.add(b.getBody());
             boss.life -= b.getDamage();
         }
 
@@ -94,12 +98,16 @@ public class WorldContactListener implements ContactListener {
 
         if(fixtureA.getUserData() instanceof Bullet){
             Bullet b = (Bullet) fixtureA.getUserData();
+//            b.dispose();
+
             b.setAlpha(0);
             YearOneWorld.bodiesToremove.add(b.getBody());
         }
 
         if(fixtureB.getUserData() instanceof Bullet){
             Bullet b = (Bullet) fixtureB.getUserData();
+//            b.dispose();
+
             b.setAlpha(0);
             YearOneWorld.bodiesToremove.add(b.getBody());
         }

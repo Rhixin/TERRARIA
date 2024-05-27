@@ -1,5 +1,6 @@
 package com.mygdx.game.Bodies;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.*;
 
@@ -13,6 +14,9 @@ public abstract class WeaponObject extends Sprite {
     public Body b2body;
     protected Player player;
 
+    public WeaponObject(Texture texture) {
+        super(texture);
+    }
 
 
     public abstract void update(float delta);

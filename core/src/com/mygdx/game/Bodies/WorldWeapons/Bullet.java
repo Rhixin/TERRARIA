@@ -1,5 +1,6 @@
 package com.mygdx.game.Bodies.WorldWeapons;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -12,9 +13,17 @@ import com.badlogic.gdx.physics.box2d.World;
 public class Bullet extends Sprite {
     private Body body;
     private float speed;
+    private Texture texture;
 
     public Bullet(World world, float startX, float startY, float targetX, float targetY, float speed) {
+        this(new Texture("RAW/bullet.png"), world, startX, startY, targetX, targetY, speed);
+    }
+
+    public Bullet(Texture texture, World world, float startX, float startY, float targetX, float targetY, float speed) {
+        super(texture);
+        this.texture = texture;
         this.speed = speed;
+        this.setSize(20, 20);
 
         Vector2 direction = new Vector2(targetX - startX, targetY - startY).nor();
 
@@ -42,11 +51,11 @@ public class Bullet extends Sprite {
     }
 
     public void update(float dt) {
-
+        this.setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
     }
 
     public void render(SpriteBatch batch) {
-
+        this.draw(batch);
     }
 
     public Vector2 getPosition() {
@@ -60,6 +69,5 @@ public class Bullet extends Sprite {
     public float getDamage() {
         return 100f;
     }
-
 
 }
