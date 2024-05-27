@@ -49,7 +49,6 @@ public class AnimationHelper {
 
     public static Animation<TextureRegion> getAnimation(int rows, int cols, Texture sheet, float duration){
 
-
         TextureRegion[][] tmp =getTexturePack(rows,cols, sheet);
 
         TextureRegion[] Frames = new TextureRegion[cols * rows];

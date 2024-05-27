@@ -182,7 +182,8 @@ public class MiningWorld extends GameWorld{
             }
         }
 
-        b2dr.render(world,gamecam.combined);
+        //b2dr.render(world,gamecam.combined);
+        //for debugging box2d ni
     }
 
     private void GameCamUpdate(){

@@ -22,7 +22,7 @@ import com.mygdx.game.Sprites.Player;
 
 public class ItemBox extends BoxActor implements Draggable {
     private static final int MAX_NUMBER = 64;
-    public static final Texture defaultTexture = new Texture("RAW/empty.png");
+    public static final Texture defaultTexture = new Texture("empty.png");
     private Item item;
     public Label countLabel;
     private int count = 0;

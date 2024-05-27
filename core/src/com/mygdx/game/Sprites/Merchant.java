@@ -51,8 +51,8 @@ public class Merchant extends Sprite {
     }
 
     private void initAnimations() {
-        Texture idleSheet = new Texture(Gdx.files.internal("RAW/player_idle.png"));
-        idleAnimation = AnimationHelper.getAnimation(1,2,idleSheet,0.2f);
+        Texture idleSheet = new Texture(Gdx.files.internal("RAW/merchant_idle2.png"));
+        idleAnimation = AnimationHelper.getAnimation(1,42,idleSheet,0.2f);
 
     }
 

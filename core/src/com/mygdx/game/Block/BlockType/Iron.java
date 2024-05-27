@@ -11,7 +11,7 @@ import com.mygdx.game.Sprites.Drop;
 
 public class Iron extends Block {
 
-    private static final Texture defaultTexture = new Texture("RAW/iron.png");
+    private static final Texture defaultTexture = new Texture("RAW/iron_block.png");
 
     public Iron(World world, Rectangle rect) {
         super(world,rect, defaultTexture);

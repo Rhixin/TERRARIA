@@ -12,7 +12,7 @@ import com.mygdx.game.Items.Resources.GoldItem;
 import com.mygdx.game.Sprites.Drop;
 
 public class Gold extends Block {
-    private static final Texture defaultTexture = new Texture("RAW/gold.png");
+    private static final Texture defaultTexture = new Texture("RAW/gold_block.png");
 
     public Gold(World world, Rectangle rect) {
         super(world,rect, defaultTexture);

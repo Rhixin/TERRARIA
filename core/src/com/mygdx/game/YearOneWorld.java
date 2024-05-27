@@ -52,7 +52,7 @@ public class YearOneWorld extends GameWorld{
         this.past_world = mineworld;
         gamecam = new OrthographicCamera();
         gamePort = new FitViewport(Terraria.V_WIDTH + 200, Terraria.V_HEIGHT + 200,gamecam);
-        map = new TmxMapLoader().load("MAPS/yearone.tmx");
+        map = new TmxMapLoader().load("MAPS/FLOOR2/MAPS/FLOOR 2.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, Terraria.PPM);
         gamecam.position.set(gamePort.getWorldWidth() / 2, gamePort.getWorldHeight()/2,0);
         world = new World(new Vector2(0,-140f), true);

@@ -16,13 +16,12 @@ import com.mygdx.game.Block.BlockType.Iron;
 import com.mygdx.game.Terraria;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class WorldCreator {
     public static HashMap<Vector2, Block> syncWorldAndTiledMap(World world, TiledMap map){
 
         HashMap<Vector2, Block> tiles = new HashMap<>();
-
-
 
         TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(2);
 
@@ -100,6 +99,19 @@ public class WorldCreator {
             }
         }
 
+        for (Map.Entry<Vector2, Block> entry : tiles.entrySet()) {
+            Vector2 position = entry.getKey();
+            Block block = entry.getValue();
+
+            Vector2 pos_above = new Vector2(position.x, position.y + 1);
+            if (!tiles.containsKey(pos_above) && block instanceof Dirt){
+                ((Dirt) block).changeRightTexture(1,2);
+            }
+
+        }
+
+
+
 
         return tiles;
     }
@@ -110,8 +122,7 @@ public class WorldCreator {
         FixtureDef fdef = new FixtureDef();
         Body body;
 
-
-        for(MapObject object : map.getLayers().get(8).getObjects().getByType(RectangleMapObject.class)){
+        for(MapObject object : map.getLayers().get(11).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
 
             bdef.type = BodyDef.BodyType.StaticBody;

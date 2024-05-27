@@ -12,7 +12,7 @@ import com.mygdx.game.Items.Resources.GoldItem;
 import com.mygdx.game.Sprites.Drop;
 
 public class Diamond extends Block {
-    private static final Texture defaultTexture = new Texture("RAW/diamond.png");
+    private static final Texture defaultTexture = new Texture("RAW/diamond_block.png");
 
     public Diamond(World world, Rectangle rect) {
         super(world,rect, defaultTexture);
