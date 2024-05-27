@@ -16,10 +16,9 @@ public class CooldownTask implements Runnable {
         try {
 
             isCooldownActive = true;
-            System.out.println("Cooldown started for " + cooldownTime + " seconds.");
             Thread.sleep(cooldownTime * 1000);
             isCooldownActive = false;
-            System.out.println("Cooldown ended.");
+
         } catch (InterruptedException e) {
             System.out.println("Cooldown was interrupted.");
             Thread.currentThread().interrupt();
@@ -31,10 +30,7 @@ public class CooldownTask implements Runnable {
     }
 
     public void startCooldown() {
-        if (!isCooldownActive) {
             cooldownThread = new Thread(this);
             cooldownThread.start();
-            System.out.println("Cooldown started.");
-        }
     }
 }

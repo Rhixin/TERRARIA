@@ -29,9 +29,15 @@ public class HealthBar {
 
     public void render(float dt){
 
-        for(int i = heartsToRender; i < 10; i++){
-            hearts.get(i).setVisible(false);
+        try{
+            for(int i = heartsToRender; i < 10; i++){
+                hearts.get(i).setVisible(false);
+            }
+        } catch (IndexOutOfBoundsException e){
+            e.printStackTrace();
         }
+
+
     }
 
     private int calculateHeartsToRender() {

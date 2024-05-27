@@ -19,12 +19,11 @@ import com.mygdx.game.Helper.Pair;
 import com.mygdx.game.Helper.SoundManager;
 import com.mygdx.game.Helper.WorldCreator;
 import com.mygdx.game.Items.Item;
-import com.mygdx.game.Items.Weapon;
 import com.mygdx.game.Screens.BlackSmithBoard;
 import com.mygdx.game.Screens.Hud;
 import com.mygdx.game.Block.Block;
 import com.mygdx.game.Screens.MerchantBoard;
-import com.mygdx.game.Sprites.*;
+import com.mygdx.game.Bodies.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,14 +42,16 @@ public class MiningWorld extends GameWorld{
     private Player player;
     private Merchant merchant;
     private Blacksmith blacksmith;
+    private Guard guard;
     private Hud hud;
     private ArrayList<SpriteBatch> spriteBatches;
     public static HashSet<Body> bodiesToremove;
-
     private MyInputProcessorFactory.MyInputListenerA playerListenerMine;
     private MyInputProcessorFactory.MyInputListenerB playerListenerScroll;
 
     public MiningWorld() {
+        SoundManager.playBackgroundMusic();
+
         gamecam = new OrthographicCamera();
         gamePort = new FitViewport(Terraria.V_WIDTH, Terraria.V_HEIGHT,gamecam);
         map = new TmxMapLoader().load("MAPS/map.tmx");
@@ -59,10 +60,6 @@ public class MiningWorld extends GameWorld{
         world = new World(new Vector2(0,-140f), true);
         spriteBatches = new ArrayList<>();
         bodiesToremove = new HashSet<>();
-
-        //SoundManager.playBamyamgengMusic();
-        SoundManager.playBackgroundMusic();
-
 
         for (int i = 0; i < 10; i++) {
             SpriteBatch spriteBatch = new SpriteBatch();
@@ -82,7 +79,7 @@ public class MiningWorld extends GameWorld{
 
 
         blacksmith = new Blacksmith(world, spriteBatches.get(3), player);
-
+        guard = new Guard(world, spriteBatches.get(3), player);
         merchant = new Merchant(world, spriteBatches.get(3), player);
 
         MyInputProcessorFactory inputFactory = new MyInputProcessorFactory();
@@ -101,10 +98,11 @@ public class MiningWorld extends GameWorld{
 
         blacksmith.update(dt);
         merchant.update(dt);
-
+        guard.update(dt);
 
         Blacksmith.blackSmithBoard.update(player.getPosition(), blacksmith.getPosition());
         Merchant.merchantboard.update(player.getPosition(), merchant.getPosition());
+        Guard.blackSmithBoard.update(player.getPosition(), guard.getPosition());
 
         if(!world.isLocked()){
             for(Body b : bodiesToremove){
@@ -137,6 +135,7 @@ public class MiningWorld extends GameWorld{
 
         player.render(delta);
         blacksmith.render(delta);
+        guard.render(delta);
         merchant.render(delta);
 
 
@@ -148,6 +147,7 @@ public class MiningWorld extends GameWorld{
                 sb.begin();
                 player.draw(sb);
                 blacksmith.draw(sb);
+                guard.draw(sb);
                 merchant.draw(sb);
                 sb.end();
             } else if (i == 2) {
@@ -160,6 +160,8 @@ public class MiningWorld extends GameWorld{
                     }
 
                 }
+
+
 
                 sb.end();
             } else if (i == 3) {
@@ -181,6 +183,7 @@ public class MiningWorld extends GameWorld{
 
                 Blacksmith.blackSmithBoard.render(delta);
                 Merchant.merchantboard.render(delta);
+                Guard.blackSmithBoard.render(delta);
                 hud.render(delta);
                 sb.end();
             }
@@ -218,7 +221,6 @@ public class MiningWorld extends GameWorld{
         if(Gdx.input.isKeyPressed(Input.Keys.Z) ){
             System.out.println("Player body pos in world. X,Y = " + player.getB2body().getPosition());
         }
-
 
     }
 
@@ -259,6 +261,10 @@ public class MiningWorld extends GameWorld{
 
     public BlackSmithBoard getBlacksmithBoard(){
         return blacksmith.blackSmithBoard;
+    }
+
+    public BlackSmithBoard getGuardBoard(){
+        return guard.blackSmithBoard;
     }
 
     public MyInputProcessorFactory.MyInputListenerA getPlayerListenerMine() {

@@ -1,9 +1,7 @@
-package com.mygdx.game.Sprites.BossAttacks;
+package com.mygdx.game.Bodies.BossAttacks;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.physics.box2d.*;
-import com.mygdx.game.Items.Item;
-import com.mygdx.game.Sprites.Projectile;
+import com.mygdx.game.Bodies.Projectile;
 
 public class Missile extends Projectile {
 

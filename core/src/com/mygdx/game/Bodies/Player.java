@@ -1,14 +1,12 @@
-package com.mygdx.game.Sprites;
+package com.mygdx.game.Bodies;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.mygdx.game.Helper.AnimationHelper;
-import com.mygdx.game.Helper.AnimationState;
-import com.mygdx.game.Helper.Cell;
-import com.mygdx.game.Helper.Pair;
+import com.mygdx.game.Helper.*;
+import com.mygdx.game.Items.Coin;
 import com.mygdx.game.Items.Item;
 import com.mygdx.game.Items.Placeable;
 import com.mygdx.game.Items.Weapon;
@@ -17,7 +15,6 @@ import com.mygdx.game.Items.Weapons.PistolItem;
 import com.mygdx.game.MiningWorld;
 import com.mygdx.game.Block.Block;
 import com.mygdx.game.Screens.Hud;
-import com.mygdx.game.Sprites.WorldWeapons.Paladin;
 import com.mygdx.game.Terraria;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -30,6 +27,10 @@ public class Player extends Sprite{
     private Animation<TextureRegion> walkLeftAnimation;
     private Animation<TextureRegion> idleAnimation;
 
+    private Animation<TextureRegion> mineRightAnimation;
+    private Animation<TextureRegion> mineLeftAnimation;
+    private Animation<TextureRegion> mineFrontAnimation;
+
     private AnimationState currentAnimationState;
     private float stateTime = 0f;
     private ArrayList<Pair<Item, Integer>> inventory;
@@ -37,8 +38,11 @@ public class Player extends Sprite{
     private int currentItem = 0;
     private Hud hud;
     private GameMode current_mode;
+    private SoundManager soundManager = new SoundManager();
 
     private float life;
+
+    public boolean isMining = false;
 
     public Player (World world, Hud hud){
         super(ATLAS.findRegion("steve"));
@@ -74,9 +78,17 @@ public class Player extends Sprite{
         Texture walkRightSheet = new Texture(Gdx.files.internal("RAW/player_walkright.png"));
         Texture walkLeftSheet = new Texture(Gdx.files.internal("RAW/player_walkleft.png"));
 
-        walkRightAnimation = AnimationHelper.getAnimation(1,8,walkRightSheet,0.1f);
-        walkLeftAnimation = AnimationHelper.getAnimation(1,8,walkLeftSheet,0.1f);
-        idleAnimation = AnimationHelper.getAnimation(1,2,idleSheet,0.2f);
+        Texture mineFrontSheet = new Texture(Gdx.files.internal("RAW/player_minefront.png"));
+        Texture mineRightSheet = new Texture(Gdx.files.internal("RAW/player_mineright.png"));
+        Texture mineLeftSheet = new Texture(Gdx.files.internal("RAW/player_mineleft.png"));
+
+        walkRightAnimation = AnimationHelper.getAnimation(1,11,walkRightSheet,0.1f);
+        walkLeftAnimation = AnimationHelper.getAnimation(1,11,walkLeftSheet,0.1f);
+        idleAnimation = AnimationHelper.getAnimation(1,12,idleSheet,0.2f);
+
+        mineFrontAnimation = AnimationHelper.getAnimation(1,12,mineFrontSheet,0.1f);
+        mineRightAnimation = AnimationHelper.getAnimation(1,12,mineRightSheet,0.1f);
+        mineLeftAnimation = AnimationHelper.getAnimation(1,12,mineLeftSheet,0.2f);
 
     }
 
@@ -115,11 +127,29 @@ public class Player extends Sprite{
 
         TextureRegion currentFrame;
         if(currentAnimationState == AnimationState.IDLE){
-            currentFrame = getIdleAnimation().getKeyFrame(stateTime, true);
+
+            if(isMining){
+                currentFrame = mineFrontAnimation.getKeyFrame(stateTime, true);
+            } else {
+                currentFrame = getIdleAnimation().getKeyFrame(stateTime, true);
+            }
+
+
         } else if (currentAnimationState == AnimationState.WALK_RIGHT){
-            currentFrame = getWalkRightAnimation().getKeyFrame(stateTime, true);
+            if(isMining){
+                currentFrame = mineRightAnimation.getKeyFrame(stateTime, true);
+            } else {
+                currentFrame = walkRightAnimation.getKeyFrame(stateTime, true);
+            }
+
         } else {
-            currentFrame = getWalkLeftAnimation().getKeyFrame(stateTime, true);
+
+            if(isMining){
+                currentFrame = mineLeftAnimation.getKeyFrame(stateTime, true);
+            } else {
+                currentFrame = getWalkLeftAnimation().getKeyFrame(stateTime, true);
+            }
+
         }
 
         setRegion(currentFrame);
@@ -149,6 +179,7 @@ public class Player extends Sprite{
         }
 
         MiningWorld.tilesMap.put(tile, new_block);
+        soundManager.playPlaceDirt();
 
         syncHudInventory();
     }
@@ -156,6 +187,7 @@ public class Player extends Sprite{
     public void deleteBlock(int x, int y){
 
         if(current_mode == GameMode.COMBAT_MODE) return;
+
 
         Vector2 tile = new Vector2(x,y);
         Block b = MiningWorld.tilesMap.get(tile);
@@ -168,7 +200,10 @@ public class Player extends Sprite{
         b.breaklife -=2;
         //--------------------------------------------
 
+        isMining = true;
+
         if(b.breaklife <= 0){
+            SoundManager.playBreakBlock();
             Drop drop = b.blocktodrop();
             MiningWorld.drops.add(drop);
             MiningWorld.tilesMap.put(tile, null);
@@ -179,10 +214,13 @@ public class Player extends Sprite{
     public void resetBlock(int x, int y) {
         if(current_mode == GameMode.COMBAT_MODE) return;
 
+        isMining = false;
+
         Block b = MiningWorld.tilesMap.get(new Cell(x,y));
         if(b == null){
             return;
         }
+
         b.breaklife = 100;
     }
 
@@ -194,6 +232,7 @@ public class Player extends Sprite{
         drop.setAlpha(0);
         MiningWorld.bodiesToremove.add(drop.getBody());
         syncHudInventory();
+        soundManager.playGetDrop();
     }
 
 
@@ -228,6 +267,37 @@ public class Player extends Sprite{
         }
 
         setCurrent_mode(GameMode.ATTACKING_MODE);
+    }
+
+    public void buySomething(Drop drop, int cost){
+        int balance = getBalance();
+
+        if(balance >= cost){
+            SoundManager.playGoodLookingWeapon();
+            getDrop(drop,1);
+            minusMoney(cost);
+        } else {
+            SoundManager.playNotEnoughMoney();
+        }
+
+    }
+
+    private int getBalance(){
+        for(Pair<Item, Integer> i : inventory){
+            if(i.getFirst() instanceof Coin){
+                return i.getSecond();
+            }
+        }
+
+        return 0;
+    }
+
+    private void minusMoney(int minus){
+        for(Pair<Item, Integer> i : inventory){
+            if(i.getFirst() instanceof Coin){
+                i.setSecond(i.getSecond() - minus);
+            }
+        }
     }
 
     public void syncHudInventory(){

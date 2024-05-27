@@ -1,15 +1,12 @@
-package com.mygdx.game.Sprites.WorldWeapons;
+package com.mygdx.game.Bodies.WorldWeapons;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
-import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.Sprites.Player;
-import com.mygdx.game.Sprites.WeaponObject;
+import com.mygdx.game.Bodies.Player;
+import com.mygdx.game.Bodies.WeaponObject;
 import com.mygdx.game.YearOneWorld;
 
 import java.util.concurrent.Executors;

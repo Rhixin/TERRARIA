@@ -1,26 +1,20 @@
 package com.mygdx.game.Screens;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Helper.SoundManager;
 import com.mygdx.game.Inventory.InventoryBox;
 import com.mygdx.game.Inventory.ItemBox;
-import com.mygdx.game.Items.Coin;
-import com.mygdx.game.Items.Item;
-import com.mygdx.game.Items.Sellable;
 import com.mygdx.game.Items.Weapons.PaladinItem;
 import com.mygdx.game.Items.Weapons.PistolItem;
-import com.mygdx.game.Sprites.Drop;
-import com.mygdx.game.Sprites.Player;
-import com.mygdx.game.Sprites.WorldWeapons.Paladin;
+import com.mygdx.game.Bodies.Drop;
+import com.mygdx.game.Bodies.Player;
 import com.mygdx.game.Terraria;
 
 import java.util.ArrayList;
@@ -34,6 +28,8 @@ public class BlackSmithBoard {
 
 
     public boolean isHidden = true;
+
+    private boolean alreadyTalked = false;
 
     private Player player;
 
@@ -53,7 +49,7 @@ public class BlackSmithBoard {
                 itembox.setItem(new PaladinItem());
             }
 
-            itembox.setCount(1);
+            itembox.setCount(50);
 
             itembox.setSize(25,25);
             InventoryBox product = new InventoryBox(itembox);
@@ -69,10 +65,10 @@ public class BlackSmithBoard {
             itembox.addListener(new InputListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    player.getDrop(new Drop(player.getB2body().getWorld(), player.getX(),player.getY(),itembox.getItem()),1);
-                    System.out.println("Ittteemm");
+                    player.buySomething(new Drop(player.getB2body().getWorld(), -1,-1,itembox.getItem()), itembox.getCount());
                     return false;
                 }
+
             });
         }
 
@@ -89,10 +85,16 @@ public class BlackSmithBoard {
         if(areBodiesClose(playerPos,blacksmithPos, 100) ){
             show();
             isHidden = false;
-            SoundManager.playBuySomehthing();
+
+            if(!alreadyTalked){
+                SoundManager.playBuySomehthing();
+                alreadyTalked = true;
+            }
+
         } else {
             hide();
             isHidden = true;
+            alreadyTalked = false;
         }
 
     }

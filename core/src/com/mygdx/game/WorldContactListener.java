@@ -1,8 +1,8 @@
 package com.mygdx.game;
 
 import com.badlogic.gdx.physics.box2d.*;
-import com.mygdx.game.Sprites.*;
-import com.mygdx.game.Sprites.WorldWeapons.Bullet;
+import com.mygdx.game.Bodies.*;
+import com.mygdx.game.Bodies.WorldWeapons.Bullet;
 
 public class WorldContactListener implements ContactListener {
     GameWorld world;
@@ -34,13 +34,20 @@ public class WorldContactListener implements ContactListener {
             YearOneBoss boss = (YearOneBoss) fixtureB.getUserData();
             WeaponObject weapon = (WeaponObject) fixtureA.getUserData();
             boss.life -= weapon.getDamage();
+        }
 
+        if(fixtureB.getUserData() instanceof WeaponObject && fixtureA.getUserData() instanceof YearOneBoss){
+            YearOneBoss boss = (YearOneBoss) fixtureA.getUserData();
+            WeaponObject weapon = (WeaponObject) fixtureB.getUserData();
+            System.out.println(boss.life);
+            boss.life -= weapon.getDamage();
         }
 
         if(fixtureA.getUserData() instanceof Bullet && fixtureB.getUserData() instanceof YearOneBoss){
             YearOneBoss boss = (YearOneBoss) fixtureB.getUserData();
             Bullet b = (Bullet) fixtureA.getUserData();
             b.setAlpha(0);
+            System.out.println(boss.life);
             boss.life -= b.getDamage();
 
         }

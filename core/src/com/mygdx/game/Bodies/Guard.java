@@ -1,4 +1,4 @@
-package com.mygdx.game.Sprites;
+package com.mygdx.game.Bodies;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,7 +15,8 @@ import com.mygdx.game.Terraria;
 
 import java.util.ArrayList;
 
-public class Blacksmith extends Sprite {
+public class Guard extends Sprite {
+
     private static final TextureAtlas ATLAS = new TextureAtlas("ANIMATION/steve.txt");
     private World world;
     private Body b2body;
@@ -24,7 +25,7 @@ public class Blacksmith extends Sprite {
     private ArrayList<Pair<Item, Integer>> inventory;
     public static BlackSmithBoard blackSmithBoard;
 
-    public Blacksmith (World world, SpriteBatch batch, Player player){
+    public Guard (World world, SpriteBatch batch, Player player){
         super(ATLAS.findRegion("steve"));
         this.world = world;
         blackSmithBoard = new BlackSmithBoard(batch, player);
@@ -53,7 +54,7 @@ public class Blacksmith extends Sprite {
 
         BodyDef bdef = new BodyDef();
         bdef.type = BodyDef.BodyType.DynamicBody;
-        bdef.position.set(32 / Terraria.PPM * 20,384 / Terraria.PPM * 3);
+        bdef.position.set(32 / Terraria.PPM * 40,384 / Terraria.PPM * 3);
 
         b2body = world.createBody(bdef);
 

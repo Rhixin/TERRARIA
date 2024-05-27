@@ -1,8 +1,7 @@
-package com.mygdx.game.Sprites;
+package com.mygdx.game.Bodies;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.*;
-import com.mygdx.game.Items.Item;
 
 public abstract class Projectile extends Sprite {
     public float damage;

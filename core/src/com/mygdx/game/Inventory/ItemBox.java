@@ -17,8 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.mygdx.game.Helper.BoxActor;
 import com.mygdx.game.Items.Item;
 
-import com.mygdx.game.Sprites.Merchant;
-import com.mygdx.game.Sprites.Player;
+import com.mygdx.game.Bodies.Merchant;
 
 public class ItemBox extends BoxActor implements Draggable {
     private static final int MAX_NUMBER = 64;

@@ -19,18 +19,20 @@ import com.mygdx.game.Helper.Pair;
 import com.mygdx.game.Helper.WorldCreator;
 import com.mygdx.game.Items.Item;
 import com.mygdx.game.Screens.Hud;
-import com.mygdx.game.Sprites.*;
-import com.mygdx.game.Sprites.BossAttacks.Missile;
-import com.mygdx.game.Sprites.WorldWeapons.Bullet;
-import com.mygdx.game.Sprites.WorldWeapons.Pistol;
+import com.mygdx.game.Bodies.*;
+import com.mygdx.game.Bodies.BossAttacks.Missile;
+import com.mygdx.game.Bodies.WorldWeapons.Bullet;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Random;
 
 
 public class YearOneWorld extends GameWorld{
-    private static OrthographicCamera gamecam;
+    public static ArrayList<Missile> missiles;
+    public static ArrayList<Bullet> bullets;
+    public static HashSet<Body> bodiesToremove;
+    public static boolean isDone = false;
+    private OrthographicCamera gamecam;
     private Viewport gamePort;
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
@@ -41,9 +43,6 @@ public class YearOneWorld extends GameWorld{
     private Hud hud;
     private ArrayList<SpriteBatch> spriteBatches;
 
-    public static ArrayList<Missile> missiles;
-    public static ArrayList<Bullet> bullets;
-    public static HashSet<Body> bodiesToremove;
     private MyInputProcessorFactory.MyInputListenerB playerListenerScroll;
     private MiningWorld past_world;
 
@@ -77,9 +76,6 @@ public class YearOneWorld extends GameWorld{
 
         hud = new Hud(spriteBatches.get(3),temp);
 
-
-
-
         player = new Player(world, hud);
         player.getB2body().setTransform(new Vector2(320,320), 0);
         player.setCurrent_mode(GameMode.COMBAT_MODE);
@@ -97,7 +93,7 @@ public class YearOneWorld extends GameWorld{
     }
 
     public void update(float dt){
-
+        isDone = boss.mode == GameMode.DEAD_MODE;
         handleInput(dt);
         player.update(dt);
         boss.update(dt, player.getPosition().x, player.getPosition().y);
@@ -115,6 +111,7 @@ public class YearOneWorld extends GameWorld{
                 }
             }
         }
+
 
         //todo fix gravity
         //------------------------------------------------------------------------------
