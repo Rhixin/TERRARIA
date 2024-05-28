@@ -67,7 +67,7 @@ public class Bullet extends Sprite {
     }
 
     public float getDamage() {
-        return 100f;
+        return 80f;
     }
 
 }

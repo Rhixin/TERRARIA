@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import com.mygdx.game.Bodies.WorldWeapons.Paladin;
+import com.mygdx.game.Helper.HealthNumberDisplay;
 import com.mygdx.game.Helper.Pair;
 import com.mygdx.game.Helper.WorldCreator;
 import com.mygdx.game.Items.Item;
@@ -51,6 +52,8 @@ public class YearOneWorld extends GameWorld{
     private MiningWorld past_world;
     public static ArrayList<Sprite> spritesToDraw;
     private Texture t = new Texture(Gdx.files.internal("RAW/paladin.png"));
+
+    private HealthNumberDisplay bossHealth;
 
 
 
@@ -91,6 +94,8 @@ public class YearOneWorld extends GameWorld{
 
 
         boss = new YearOneBoss(world, 520, 500);
+        bossHealth = new HealthNumberDisplay(boss);
+
 
 
         MyInputProcessorFactory inputFactory = new MyInputProcessorFactory();
@@ -107,7 +112,7 @@ public class YearOneWorld extends GameWorld{
         player.update(dt);
         boss.update(dt, player.getPosition().x, player.getPosition().y);
 
-        if(player.getLife() <= 0){
+        if(player.getLife() <= 0 || boss.life <= 0){
             Terraria.gameMode = GameMode.MINING_MODE;
         }
 
@@ -196,6 +201,8 @@ public class YearOneWorld extends GameWorld{
                 for(Missile m : missiles){
                     m.render(sb);
                 }
+
+                bossHealth.render(sb);
 
                 sb.end();
             }

@@ -19,8 +19,8 @@ public class YearOneBoss extends Sprite {
     private float current_cooldown = 0;
     private float timeSinceLastAttack = 0f;
     private final float attackInterval = 0.2f;
-    private static final Texture t1 = new Texture("RAW/attack_serato.png");
-    private static final Texture t2 = new Texture("RAW/break_serato.png");
+    private static final Texture t1 = new Texture("RAW/serato_cool_and_normal.png");
+    private static final Texture t2 = new Texture("RAW/serato_break.png");
     private static final float width = 100, height = 100;
     private CooldownTask cooldownBossStateHandler;
     public float life;

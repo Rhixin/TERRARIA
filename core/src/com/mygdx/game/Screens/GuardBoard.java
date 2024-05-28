@@ -77,7 +77,7 @@ public class GuardBoard {
             isHidden = false;
 
             if(!alreadyTalked){
-                //SoundManager.playBuySomehthing();
+                SoundManager.playAllHail();
                 alreadyTalked = true;
             }
 

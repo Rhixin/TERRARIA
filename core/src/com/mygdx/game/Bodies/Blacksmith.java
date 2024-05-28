@@ -52,7 +52,7 @@ public class Blacksmith extends Sprite {
 
         BodyDef bdef = new BodyDef();
         bdef.type = BodyDef.BodyType.DynamicBody;
-        bdef.position.set(32 / Terraria.PPM * 20,384 / Terraria.PPM * 3);
+        bdef.position.set(32 / Terraria.PPM * 40,384 / Terraria.PPM * 3);
 
         b2body = world.createBody(bdef);
 
